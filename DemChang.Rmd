@@ -1,0 +1,143 @@
+---
+title: "Demographic Changes"
+author: "Karolina DM"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+source("DemographicChanges.R")
+library("knitr")
+library("tidyverse")
+```
+
+
+## __Discussion__
+
+### This is a report about demographic changes in the world since 1960 to 2019. 
+
+Fertility Rate (total, births per woman) is:
+
+> Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year.
+
+(source of definition & data: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)
+
+
+The country with the highest fertility rate in 2019 is 
+`r HighFertRat$Country.Name`. The fertility rate is 
+`r HighFertRat$hfr`.
+
+The country with the lowest fertility rate in 2019 is 
+`r LowFertRat$Country.Name`. The fertility rate is 
+`r LowFertRat$lfr`.
+
+This is the list of countries with the highest fertility rate (ordered by highest to lowest). Table shows fertility rate difference declining from 1960 to 2019.
+
+```{r top_10_hfr, echo=FALSE}
+kable(top_10_hfr, col.names = c("Country", "Fertility Rate drop since 1960 to 2019"))
+```
+
+This map show fertility rate in 2019. 
+
+```{r , echo=FALSE}
+mapCountryData(
+  comb_data_map_fr,
+  mapTitle = "Fertility Rate in 2019",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "RdPu")
+)
+```
+
+
+
+Death Rate (crude, per 1000 people) is: 
+
+> Crude death rate indicates the number of deaths occurring during the year, per 1,000 population estimated at midyear. Subtracting the crude death rate from the crude birth rate provides the rate of natural increase, which is equal to the rate of population change in the absence of migration.
+
+(data & definition source: https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)
+
+The country with the highest death rate in 2019 is 
+`r HighDeathRat$Country.Name`. The death rate is 
+`r HighDeathRat$hdr`.
+
+The country with the lowest death rate in 2019 is 
+`r LowDeathRat$Country.Name`. The death rate is 
+`r LowDeathRat$ldr`.
+
+This is the list of countries with the highest death rate (ordered by highest to lowest). Table shows death rate difference declining from 1960 to 2019.
+
+```{r top_10_hdr, echo=FALSE}
+kable(top_10_hdr, col.names = c("Country", "Death Rate increase since 1960 to 2019"))
+```
+
+This map show death rate in 2019. 
+
+```{r , echo=FALSE}
+mapCountryData(
+  comb_data_map_dr,
+  mapTitle = "Death Rate in 2019",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "Blues")
+)
+```
+
+Birth Rate (crude, per 1000 people) is: 
+
+>Crude birth rate indicates the number of live births occurring during the year, per 1,000 population estimated at midyear. Subtracting the crude death rate from the crude birth rate provides the rate of natural increase, which is equal to the rate of population change in the absence of migration.
+
+(data & definition source: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)
+
+The country with the highest birth rate in 2019 is 
+`r HighBirthRat$Country.Name`. The birth rate is 
+`r HighBirthRat$hbr`.
+
+The country with the lowest birth rate in 2019 is 
+`r LowBirthRat$Country.Name`. The birth rate is 
+`r LowBirthRat$lbr`.
+
+This is the list of countries with the highest birth rate (ordered by highest to lowest). Table shows birth rate difference declining from 1960 to 2019.
+
+```{r top_10_hbr, echo=FALSE}
+kable(top_10_hbr, col.names = c("Country", "Birth Rate drop since 1960 to 2019"))
+```
+
+This map show birth rate in 2019. 
+
+```{r , echo=FALSE}
+mapCountryData(
+  comb_data_map_br,
+  mapTitle = "Birth Rate in 2019",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "Greens")
+)
+```
+
+Life expectancy at birth (total, years): 
+
+>indicates the number of years a newborn infant would live if prevailing patterns of mortality at the time of its birth were to stay the same throughout its life.
+
+(data & definition source: https://data.worldbank.org/indicator/SP.DYN.LE00.IN)
+
+The country with the highest life expectancy in 2019 is 
+`r HighLifeExpect$Country.Name`. The life expectancy rate is 
+`r HighLifeExpect$hle`.
+
+The country with the lowest life expectancy in 2019 is 
+`r LowLifeExpect$Country.Name`. The life expectatancy is 
+`r LowLifeExpect$lle`.
+
+This is the list of countries with the largest life expectancy gains from 1960 to 2019
+
+```{r top_10_hleg, echo=FALSE}
+kable(top_10_hleg, col.names = c("Country", "The greatest increase since 1960 to 2019 (in years)"))
+```
+
+This map show life expectrancy in 2019. 
+
+```{r , echo=FALSE}
+mapCountryData(
+  comb_data_map_le,
+  mapTitle = "Life expectancy in 2019",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "Purples")
+)
+```
