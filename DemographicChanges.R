@@ -20,6 +20,13 @@ FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project
                         stringsAsFactors = F)
 LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancyTotal.csv",
                        stringsAsFactors = F)
+ContracFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/contraceptive.csv",
+                    stringsAsFactors = F,
+                    skip = 4)
+LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/laborFem.csv",
+                     stringsAsFactors = F,
+                     skip = 4)
+
 
 #The Highest Fertility Rate in the World in 2019
 HighFertRat <- FertRateTot %>%
@@ -84,7 +91,7 @@ comb_data_map_eu_fr <- joinCountryData2Map(
   mapResolution = "high"
 )
 
-#chart
+#chart: EU countries & Fertility Rate in 2019 
 EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, X2019), y = X2019, fill = X2019)) + 
   scale_fill_gradient(low="lightblue", high="red") +
   coord_flip() +
