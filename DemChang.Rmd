@@ -15,7 +15,7 @@ library("tidyverse")
 
 ### This is a report about demographic changes in the world since 1960 to 2019. 
 
-Fertility Rate (total, births per woman) is:
+__Fertility Rate__ (total, births per woman) is:
 
 > Total fertility rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year.
 
@@ -47,9 +47,33 @@ mapCountryData(
 )
 ```
 
+The country of EU with the highest fertility rate in 2019 is 
+`r EU_HighFertRat$Country.Name`. The fertility rate is 
+`r EU_HighFertRat$eu_hfr`.
+The high fertility rate in France is the result of counting a combined result with dependent territories in the whole world (e.g. French Guiana).
 
+The country of EU with the lowest fertility rate in 2019 is 
+`r EU_LowFertRat$Country.Name`. The fertility rate is 
+`r EU_LowFertRat$eu_lfr`.
 
-Death Rate (crude, per 1000 people) is: 
+This map show fertility rate in EU countries in 2019. 
+
+```{r , echo=FALSE}
+mapCountryData(
+  comb_data_map_eu_fr,
+  mapTitle = "Fertility Rate in 2019 in EU",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "RdPu")
+)
+```
+
+This chart show fertility rate in EU countries in 2019.
+
+```{r EU_FR=plot, dev='png', echo=FALSE}
+plot(EU_FR)
+```
+
+__Death Rate__ (crude, per 1000 people) is: 
 
 > Crude death rate indicates the number of deaths occurring during the year, per 1,000 population estimated at midyear. Subtracting the crude death rate from the crude birth rate provides the rate of natural increase, which is equal to the rate of population change in the absence of migration.
 

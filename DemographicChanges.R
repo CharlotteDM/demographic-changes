@@ -18,10 +18,8 @@ DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/d
                       stringsAsFactors = F)
 FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/fertilityRateTotal.csv",
                         stringsAsFactors = F)
-LaborForceTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LaborForceTotal.csv",
-                          stringsAsFactors = F)
-PopTot <- read.csv( "/Users/kdm/programowanie w R/demographicChanges_project/data/populationTotal.csv",
-                    stringsAsFactors = F)
+LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancyTotal.csv",
+                       stringsAsFactors = F)
 
 #The Highest Fertility Rate in the World in 2019
 HighFertRat <- FertRateTot %>%
@@ -51,6 +49,57 @@ comb_data_map_fr <- joinCountryData2Map(
   mapResolution = "high"
 )
 
+
+#filters data from EU countries
+#filter data from EU
+EU_FertRateTot <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "AUT" |
+                Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                Country.Code == "CYP" |
+                Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                Country.Code == "SWE" | Country.Code == "HUN" | 
+                Country.Code == "ITA")
+
+#The Highest Fertility Rate in the EU in 2019
+EU_HighFertRat <- EU_FertRateTot %>%
+  filter(X2019 == max(X2019, na.rm = T)) %>%
+  select(Country.Name, X2019) %>%
+  mutate(eu_hfr = round(X2019,1))
+
+#The Lowest Fertility Rate in the World in 2019
+EU_LowFertRat <- EU_FertRateTot %>%
+  filter(X2019 == min(X2019, na.rm = T)) %>%
+  select(Country.Name, X2019) %>%
+  mutate(eu_lfr = round(X2019,1))
+
+#map FR in EU countries in 2019
+comb_data_map_eu_fr <- joinCountryData2Map(
+  EU_FertRateTot,
+  joinCode = "ISO3",
+  nameJoinColumn = "Country.Code",
+  mapResolution = "high"
+)
+
+#chart
+EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, X2019), y = X2019, fill = X2019)) + 
+  scale_fill_gradient(low="lightblue", high="red") +
+  coord_flip() +
+  theme_light() +
+  labs(
+    title = "Fertility rate in EU in 2019",
+    subtitle = "(births per woman)",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)",
+    x = "EU Country",
+    y = "Fertility rate") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
+    axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
+    legend.position = "none") 
 
 ##Death Rate
 #The Highest Death Rate in the World in 2019
