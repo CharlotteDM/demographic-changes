@@ -19,9 +19,6 @@ FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project
                         stringsAsFactors = F)
 LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancyTotal.csv",
                        stringsAsFactors = F)
-ContracFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/contraceptive.csv",
-                    stringsAsFactors = F,
-                    skip = 4)
 LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/laborFem.csv",
                      stringsAsFactors = F,
                      skip = 4)
