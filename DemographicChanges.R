@@ -1,14 +1,13 @@
-library(dplyr)
-library(tidyverse)
-library(ggplot2)
+library("dplyr")
+library("tidyverse")
+library("ggplot2")
 library(gganimate)
 library(ggrepel)
-
-library(rworldmap)
+library("rworldmap")
 library(rgeos)
-library(RColorBrewer)
+library("RColorBrewer")
 library(rstudioapi)
-library(knitr)
+library("knitr")
 
 
 
@@ -26,7 +25,8 @@ ContracFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/
 LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/laborFem.csv",
                      stringsAsFactors = F,
                      skip = 4)
-
+AgeWom <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/AgeWomFirstChild.csv",
+                   stringsAsFactors = F)
 
 #The Highest Fertility Rate in the World in 2019
 HighFertRat <- FertRateTot %>%
@@ -107,6 +107,84 @@ EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, 
     axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
     axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
     legend.position = "none") 
+
+# Mean age of women at birth of first child - preparing df
+MeanAgeWom <- select(AgeWom, indic_de:OBS_VALUE) 
+MeanAgeWom2019 <- filter(MeanAgeWom, 
+                     indic_de=="AGEMOTH1",
+                     TIME_PERIOD==2019)
+# Mean age of women at birth of first child - replacing country code
+MeanAgeWom2019[MeanAgeWom2019 == "BE"] <- "BEL"
+MeanAgeWom2019[MeanAgeWom2019 == "BG"] <- "BGR"
+MeanAgeWom2019[MeanAgeWom2019 == "CZ"] <- "CZE"
+MeanAgeWom2019[MeanAgeWom2019 == "DK"] <- "DNK"
+MeanAgeWom2019[MeanAgeWom2019 == "DE"] <- "DEU"
+MeanAgeWom2019[MeanAgeWom2019 == "EE"] <- "EST"
+MeanAgeWom2019[MeanAgeWom2019 == "EL"] <- "GRC"
+MeanAgeWom2019[MeanAgeWom2019 == "ES"] <- "ESP"
+MeanAgeWom2019[MeanAgeWom2019 == "FR"] <- "FRA"
+MeanAgeWom2019[MeanAgeWom2019 == "HR"] <- "HRV"
+MeanAgeWom2019[MeanAgeWom2019 == "IT"] <- "ITA"
+MeanAgeWom2019[MeanAgeWom2019 == "CY"] <- "CYP"
+MeanAgeWom2019[MeanAgeWom2019 == "LV"] <- "LVA"
+MeanAgeWom2019[MeanAgeWom2019 == "LT"] <- "LTU"
+MeanAgeWom2019[MeanAgeWom2019 == "LU"] <- "LUX"
+MeanAgeWom2019[MeanAgeWom2019 == "HU"] <- "HUN"
+MeanAgeWom2019[MeanAgeWom2019 == "MT"] <- "MLT"
+MeanAgeWom2019[MeanAgeWom2019 == "NL"] <- "NLD"
+MeanAgeWom2019[MeanAgeWom2019 == "AT"] <- "AUT"
+MeanAgeWom2019[MeanAgeWom2019 == "PL"] <- "POL"
+MeanAgeWom2019[MeanAgeWom2019 == "PT"] <- "PRT"
+MeanAgeWom2019[MeanAgeWom2019 == "RO"] <- "ROU"
+MeanAgeWom2019[MeanAgeWom2019 == "SI"] <- "SVN"
+MeanAgeWom2019[MeanAgeWom2019 == "SK"] <- "SVK"
+MeanAgeWom2019[MeanAgeWom2019 == "FI"] <- "FIN"
+MeanAgeWom2019[MeanAgeWom2019 == "SE"] <- "SWE"
+MeanAgeWom2019[MeanAgeWom2019 == "IE"] <- "IRL"
+
+# Mean age of women at birth of first child - removing other countries and some other records
+MeanAgeWom2019 <- MeanAgeWom2019[-c(1, 2, 4, 7, 12, 13, 17, 20, 24, 29, 32, 36, 40:42), ]
+
+# Mean age of women at birth of first child - renaming column's name
+MeanAgeWom2019 <- MeanAgeWom2019 %>% rename(Country.Code = geo)
+
+# Mean age of women at birth of first child - joining df's
+comb_data_agewom_fr <- left_join(EU_FertRateTot, MeanAgeWom2019, by = "Country.Code")
+
+# Mean age of women at birth of first child & fertility rate - correlation
+cor(comb_data_agewom_fr$X2019, comb_data_agewom_fr$OBS_VALUE, use = "complete.obs")
+
+# Mean age of women at birth of first child & fertility rate - chart
+ggFR <- ggplot(data = comb_data_agewom_fr) +
+  geom_text(mapping = aes(x = X2019, y = OBS_VALUE, label = Country.Code)) +
+  theme_light() +
+  labs(
+    title = "Fertility rate & mean age of woman at birth of first child",
+    subtitle = "in EU countries in 2019",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN
+    https://ec.europa.eu/eurostat/databrowser/view/TPS00017/default/table?lang=en&category=demo.demo_fer)",
+    x = "Fertility Rate",
+    y = "Mean age", 
+    col = "EU Country") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    plot.subtitle = element_text(color="slateblue", size=8, face="italic"),
+    plot.caption = element_text(color="deeppink", size=7),
+    axis.title.x = element_text(color="darkmagenta", size=10),
+    axis.title.y = element_text(color="darkmagenta", size=10)
+  ) 
+
+ggFR
+
+#Contraceptive modern method in EU countries
+Country.Code <- c("AUT", "BEL", "BGR", "CYP", "CZE", "DEU", "DNK", "ESP", "EST", "FIN", "FRA",
+                  "GRC", "HRV", "HUN", "IRL", "ITA", "LTU", "LUX", "LVA", "MLT", "NLD", "POL", 
+                  "PRT", "ROU", "SVK", "SVN", "SWE")
+AnyMethod <- c(60.7, 58.3, 59.2, NA, 54, 58.1, 62.3, 56.5, 54.8, 78, 63.5, 50.8, 
+               50.8, 45, 65, 55.6, 42.2, NA, 57.2, 48.2, 62.3, 46, 59.8, 53.5, 52.4, 50.2, 59.8)
+
+
+
 
 ##Death Rate
 #The Highest Death Rate in the World in 2019

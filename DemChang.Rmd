@@ -73,6 +73,15 @@ This chart shows fertility rate in EU countries in 2019.
 plot(EU_FR)
 ```
 
+Correlation between fertility rate and mean age of woman at birth first child is
+__```r cor(comb_data_agewom_fr$X2019, comb_data_agewom_fr$OBS_VALUE, use = "complete.obs")```__
+
+This chart shows fertility rate and mean age of woman at birth first child (in EU countries in 2019).
+
+```{r ggFR=plot, dev='png', echo = FALSE}
+plot(ggFR)
+```
+
 __Death Rate__ (crude, per 1000 people) indicates: 
 
 > the number of deaths occurring during the year, per 1,000 population estimated at midyear. Subtracting the crude death rate from the crude birth rate provides the rate of natural increase, which is equal to the rate of population change in the absence of migration.
