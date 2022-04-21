@@ -8,7 +8,7 @@ library(rgeos)
 library("RColorBrewer")
 library(rstudioapi)
 library("knitr")
-
+library("plotly")
 
 
 BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/birthRateCrudo.csv", 
@@ -105,7 +105,7 @@ EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, 
     axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
     legend.position = "none") 
 
-# Mean age of women at birth of first child - preparing df
+### Mean age of women at birth of first child - preparing df
 MeanAgeWom <- select(AgeWom, indic_de:OBS_VALUE) 
 MeanAgeWom2019 <- filter(MeanAgeWom, 
                      indic_de=="AGEMOTH1",
@@ -173,17 +173,84 @@ ggFR <- ggplot(data = comb_data_agewom_fr) +
 
 ggFR
 
-#Contraceptive modern method in EU countries
+###Contraceptive modern method in EU countries
+
+#creates new data frame
 Country.Code <- c("AUT", "BEL", "BGR", "CYP", "CZE", "DEU", "DNK", "ESP", "EST", "FIN", "FRA",
                   "GRC", "HRV", "HUN", "IRL", "ITA", "LTU", "LUX", "LVA", "MLT", "NLD", "POL", 
                   "PRT", "ROU", "SVK", "SVN", "SWE")
 AnyMethod <- c(60.7, 58.3, 59.2, NA, 54, 58.1, 62.3, 56.5, 54.8, 78, 63.5, 50.8, 
                50.8, 45, 65, 55.6, 42.2, NA, 57.2, 48.2, 62.3, 46, 59.8, 53.5, 52.4, 50.2, 59.8)
 
+PrevContrMeth <- data.frame(Country.Code, AnyMethod)
 
+#joins data
+comb_data_agewom_fr_contr <- left_join(comb_data_agewom_fr, PrevContrMeth, by = "Country.Code")
 
+# Fertility rate & contraceptive methods - correlation
+cor(comb_data_agewom_fr_contr$X2019, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
 
-##Death Rate
+# Mean age of women at birth of first child & contraceptive methods - correlation
+cor(comb_data_agewom_fr_contr$OBS_VALUE, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
+
+# Chart: Mean age of women at birth of first child & contraceptive methods
+ggCM <- ggplot(data = comb_data_agewom_fr_contr) +
+  geom_point(mapping = aes(x = OBS_VALUE, y = AnyMethod, 
+                           color = Country.Code, size = X2019)) +
+  theme_light() +
+  labs(
+    title = "Contraceptive methods - prevalence & mean age of woman at birth of first child",
+    subtitle = "in 2019 in EU Countries",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN
+    https://ec.europa.eu/eurostat/databrowser/view/TPS00017/default/table?lang=en&category=demo.demo_fer
+    https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/files/documents/2020/Jan/un_2019_contraceptiveusebymethod_databooklet.pdf)",
+    x = "Mean age (at birth of first child)",
+    y = "Contraceptive methods - prevalence (%)", 
+    col = "EU Country",
+    size = "Fertility Rate") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    plot.subtitle = element_text(color="slateblue", size=8, face="italic"),
+    plot.caption = element_text(color="deeppink", size=7),
+    axis.title.x = element_text(color="darkmagenta", size=10),
+    axis.title.y = element_text(color="darkmagenta", size=10)
+  ) 
+ggplotly(ggCM)
+
+plot_ly(data = comb_data_agewom_fr_contr, 
+        x = ~OBS_VALUE, 
+        y = ~AnyMethod, 
+        color = ~X2019, 
+        size = ~X2019,
+        type = "scatter",
+        mode = "markers",
+        hoverinfo = "text",
+        text = ~paste("</br> Mean Age: ", OBS_VALUE,
+                      "</br> Contr Meth: ", AnyMethod,
+                      "</br> Country: ", Country.Code)) %>%
+         layout(title = "Contraceptive methods - prevalence & mean age of woman at birth of first child",
+         xaxis = list(title = "Mean age (at birth of first child)"),
+         yaxis = list(title = "Contraceptive methods - prevalence (%)")) 
+  
+ layout(
+    title = "Contraceptive methods - prevalence & mean age of woman at birth of first child",
+    subtitle = "in 2019 in EU Countries",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN
+    https://ec.europa.eu/eurostat/databrowser/view/TPS00017/default/table?lang=en&category=demo.demo_fer
+    https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/files/documents/2020/Jan/un_2019_contraceptiveusebymethod_databooklet.pdf)",
+    xaxis = "Mean age (at birth of first child)",
+    yaxis = "Contraceptive methods - prevalence (%)", 
+    col = "EU Country",
+    size = "Fertility Rate") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    plot.subtitle = element_text(color="slateblue", size=8, face="italic"),
+    plot.caption = element_text(color="deeppink", size=7),
+    axis.title.x = element_text(color="darkmagenta", size=10),
+    axis.title.y = element_text(color="darkmagenta", size=10)
+  ) 
+
+### Death Rate
 #The Highest Death Rate in the World in 2019
 HighDeathRat <- DeathRate %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
