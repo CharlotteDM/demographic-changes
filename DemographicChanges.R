@@ -221,7 +221,10 @@ ggplotly(ggCM)
 
 
 #Plotly: Mean age of women at birth of first child & contraceptive methods
-legendtitle <- list(yref='paper',xref="paper",y=1.05,x=1.1, text="Country",showarrow=F)
+legendtitle <- list(yref='paper',xref="paper",y=1.05,x=1.1, 
+                    yanchor = "bottom", xanchor = "left",
+                    text="Country", color = "darkpink", 
+                    size = 7, face = "bold", showarrow=F)
 
 cust_color <- col2rgb(c(palette = 1:3))
 
@@ -239,16 +242,34 @@ plt <- plot_ly(
                 "</br> Contr Meth (%): ", AnyMethod,
                 "</br> Country: ", Country.Code,
                 "</br> Fertility Rate: ", X2019)) %>%
-  layout(title = "Contraceptive methods - prevalence \n & mean age of woman at birth of first child",
-         xaxis = list(title = "Mean age (at birth of first child)"),
-         yaxis = list(title = "Contraceptive methods - prevalence (%)"),
+  layout(
+    title = "Contraceptive methods - prevalence \n & mean age of woman at birth of first child",
+    titlefont = list(
+      size = 20,
+      color = "darkblue"),
+         xaxis = list(title = "Mean age (at birth of first child)", 
+                      color="deeppink", size=10),
+         yaxis = list(title = "Contraceptive methods - prevalence (%)", 
+                      color="deeppink", size=10),
          annotations = legendtitle)
        
 plt
-is.data.frame(plt)
-is.data.frame(comb_data_agewom_fr)
-# convert  plt object to a dataframe
-renderPlotly(plt)
+
+#adds data: GDP 2019
+#data source: https://ec.europa.eu/eurostat/databrowser/view/sdg_08_10/default/table
+
+GDP_per_cap <- c(36080, 6630, 18460, 49270, 35980, 15510, 17760, 25200, 33320, 12700, 27230, 25370,
+                 12530, 14050, 85030, 13270, 22660, 41980, 38110, 13020, 18670, 9120, 20720, 15890,
+                 37150, 44180, 60130)
+Country.Code <- c("BEL", "BGR", "CZE", "DNK", "DEU", "EST", "GRC", "ESP", "FRA", "HRV", "ITA",
+                  "CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
+                  "SVN", "SVK", "FIN", "SWE", "IRL")
+
+GDP_EU_2019 <- data.frame(Country.Code, GDP_per_cap)      
+
+#joins data
+comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_2019, by = "Country.Code")
+
 
 
 ### Death Rate
