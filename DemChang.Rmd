@@ -8,6 +8,8 @@ output: html_document
 source("DemographicChanges.R")
 library("knitr")
 library("tidyverse")
+library("plotly")
+library("htmlwidgets")
 ```
 
 
@@ -73,13 +75,30 @@ This chart shows fertility rate in EU countries in 2019.
 plot(EU_FR)
 ```
 
+There are many correlates of the fertility rate. One of them is the age of the mother when she gives birth to her first child. 
 Correlation between fertility rate and mean age of woman at birth first child is
 __```r cor(comb_data_agewom_fr$X2019, comb_data_agewom_fr$OBS_VALUE, use = "complete.obs")```__
+The higher the age of birth of the first child, the lower the fertility rate.
 
 This chart shows fertility rate and mean age of woman at birth first child (in EU countries in 2019).
 
 ```{r ggFR=plot, dev='png', echo = FALSE}
 plot(ggFR)
+```
+
+As we can see in Eastern European countries belonging to the EU, the fertility rate is higher and the age of women giving birth to the first child is lower than in other EU countries
+
+One of the potential correlates of fertility rate and the age at which women give birth to first child may be a greater prevalence of contraception and therefore - more frequent use of it.
+Correlation between fertility rate and prevalence of contraceptive methods is
+__```r cor(comb_data_agewom_fr_contr$X2019, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")```__
+(Source of data about prevalence of contraceptive methods in EU countries: https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/files/documents/2020/Jan/un_2019_contraceptiveusebymethod_databooklet.pdf)
+This correlation is really weak. 
+
+
+This interactive graph shows the distribution of the variables: the fertility rate, the average age of the first child's birth, and the prevalence of contraception used.
+
+```{r plt=ggplotly, echo=FALSE, error=FALSE, warning=FALSE}
+ggplotly(plt)
 ```
 
 __Death Rate__ (crude, per 1000 people) indicates: 
