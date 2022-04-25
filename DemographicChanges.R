@@ -295,6 +295,24 @@ ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp,
         lower = list(continuous = "smooth"))
 
 
+#regression
+comb_data_agewom_fr_contr_gdp$GDP_per_cap <- as.numeric(GDP_per_cap)
+comb_data_agewom_fr_contr_gdp$OBS_VALUE <- as.numeric(OBS_VALUE)
+
+exists("GDP_per_cap")
+exists("X2019")
+
+ls()
+
+###ggplot(comb_data_agewom_fr_contr_gdp, aes(x = X2019, y = AnyMethod) +
+         geom_point() +
+         geom_smooth(method = "lm") +
+         labs(x = "FR", y = "Contr meth"))
+
+
+regressionLM <- lm(X2019 ~ AnyMethod, data = comb_data_agewom_fr_contr_gdp)
+regressionLM
+summary(regressionLM)
 
 
 ### Death Rate
@@ -376,6 +394,7 @@ dr_pl <- c(7.6, 7.6, 7.9, 7.5, 7.6, 7.4, 7.4, 7.7, 7.6, 8.1, 8.2, 8.7, 8, 8.4, 8
            9, 9.4, 9.2, 9.8, 9.2, 9.3, 9.6, 10, 10.3, 10.1, 10.1, 9.9, 10.1, 10.2, 10.6,
            10.3, 10.2, 10, 10, 10, 9.8, 9.7, 9.9, 9.6, 9.5, 9.4, 9.6, 9.5, 9.6, 9.7,
            9.9, 10, 10.1, 9.9, 9.9, 10.1, 10.2, 9.9, 10.4, 10.2, 10.6, 10.9, 10.8)
+
 PL_DR <- data.frame(year_dr_pl, dr_pl)
 
 ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
