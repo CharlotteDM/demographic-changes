@@ -60,7 +60,7 @@ __`r EU_LowFertRat$eu_lfr`__.
 
 This map shows fertility rate in EU countries in 2019. 
 
-```{r , echo=FALSE}
+```{r , echo=FALSE, out.width="150%" }
 mapCountryData(
   comb_data_map_eu_fr,
   mapTitle = "Fertility Rate in 2019 in EU",
@@ -71,7 +71,7 @@ mapCountryData(
 
 This chart shows fertility rate in EU countries in 2019.
 
-```{r EU_FR=plot, dev='png', echo=FALSE}
+```{r EU_FR=plot, dev='png', out.width="150%", echo=FALSE}
 plot(EU_FR)
 ```
 
@@ -82,7 +82,7 @@ The higher the age of birth of the first child, the lower the fertility rate.
 
 This chart shows fertility rate and mean age of woman at birth first child (in EU countries in 2019).
 
-```{r ggFR=plot, dev='png', echo = FALSE}
+```{r ggFR=plot, dev='png', out.width="150%", echo = FALSE}
 plot(ggFR)
 ```
 
@@ -97,7 +97,7 @@ __```r cor(comb_data_agewom_fr_contr$X2019, comb_data_agewom_fr_contr$AnyMethod,
 
 This interactive graph shows the distribution of the variables: the fertility rate, the average age of the first child's birth, and the prevalence of contraception used (click dot on chart for more information).
 
-```{r plt=ggplotly, echo=FALSE, error=FALSE, warning=FALSE}
+```{r plt=ggplotly, out.width="110%", echo=FALSE, error=FALSE, warning=FALSE}
 ggplotly(plt)
 ```
 
@@ -120,7 +120,13 @@ __```r cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp
 The situation is similar in the case of the next correlated pair of variables: __contraceptive methods__ and  __GDP__. Correlation is
 __```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs")```__ and it also strong. 
 
+This graph shows the correlations between the variables discussed above. 
 
+``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
+gg
+```
+
+As we can see...
 
 __Death Rate__ (crude, per 1000 people) indicates: 
 

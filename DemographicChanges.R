@@ -10,6 +10,7 @@ library(rstudioapi)
 library("knitr")
 library("plotly")
 library("htmlwidgets")
+library("GGally")
 
 BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/birthRateCrudo.csv", 
                       stringsAsFactors = F)
@@ -244,7 +245,7 @@ plt <- plot_ly(
   layout(
     title = "Contraceptive methods - prevalence \n & mean age of woman at birth of first child",
     titlefont = list(
-      size = 20,
+      size = 18,
       color = "darkblue"),
          xaxis = list(title = "Mean age (at birth of first child)", 
                       color="deeppink", size=10),
@@ -280,15 +281,16 @@ sd(comb_data_agewom_fr_contr_gdp$GDP_per_cap)
 #correlation: Prevalence of contraceptive methods and GDP
 cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs") 
 
-
-#ggpairs: Fertility rate and others factors
-ggpairs(comb_data_agewom_fr_contr_gdp, 
-        columns = c("X2019","OBS_VALUE", "AnyMethod", "GDP_per_cap"),
-        aes(color = "Country.Code"),
+#ggpairs
+gg <- ggpairs(comb_data_agewom_fr_contr_gdp, 
+        columns = c("OBS_VALUE", "AnyMethod", "GDP_per_cap"),
+        title = "Correlations",
+        columnLabels = c("Mean age", "Contracept prev", "GDP per cap"),
         upper = list(continuous = wrap("cor", size = 2.5)),
         lower = list(continuous = "smooth"))
 
 
+?ggpairs
 ### Death Rate
 #The Highest Death Rate in the World in 2019
 HighDeathRat <- DeathRate %>%
@@ -377,3 +379,32 @@ comb_data_map_le <- joinCountryData2Map(
   mapResolution = "high"
 )
 
+
+#Life Expectancy and depressive symptoms
+#source of data: https://ec.europa.eu/eurostat/databrowser/view/HLTH_EHIS_MH1E/default/table?lang=en&category=hlth.hlth_state.hlth_sph
+
+#filters data from EU countries
+EU_LifeExpect <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "AUT" |
+                            Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                            Country.Code == "CYP" |
+                            Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                            Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                            Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                            Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                            Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                            Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                            Country.Code == "SWE" | Country.Code == "HUN" | 
+                            Country.Code == "ITA")
+
+#adds data about depressive symptoms
+Depr_sympt <- c(8.4, 5.0, 4.2, 8.3, 9.4, 8.2, 2.7, 4.8, 10.8, 8.9, 4.2, 2.5,
+                 5.7, 6.2, 8.8, 5.5, 8.8, 8.3, 5.6, 5.2, 8.5, 4.3, 7.5, 3.2,
+                 6.5, 10.5, 4.9)
+Country.Code <- c("BEL", "BGR", "CZE", "DNK", "DEU", "EST", "GRC", "ESP", "FRA", "HRV", "ITA",
+                  "CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
+                  "SVN", "SVK", "FIN", "SWE", "IRL")
+
+Depr_GDP_EU_2019 <- data.frame(Country.Code, Depr_sympt, GDP_per_cap)  
+
+#new data frame with depressive symptoms and GDP_per_capita
+EU_LifeExpect_depr_GDP <- left_join(EU_LifeExpect, Depr_GDP_EU_2019, by = "Country.Code")
