@@ -282,7 +282,7 @@ sd(comb_data_agewom_fr_contr_gdp$GDP_per_cap)
 cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs") 
 
 #ggpairs
-gg <- ggpairs(comb_data_agewom_fr_contr_gdp, 
+ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp, 
         columns = c("OBS_VALUE", "AnyMethod", "GDP_per_cap"),
         title = "Correlations",
         columnLabels = c("Mean age", "Contracept prev", "GDP per cap"),
@@ -290,7 +290,7 @@ gg <- ggpairs(comb_data_agewom_fr_contr_gdp,
         lower = list(continuous = "smooth"))
 
 
-?ggpairs
+
 ### Death Rate
 #The Highest Death Rate in the World in 2019
 HighDeathRat <- DeathRate %>%
@@ -384,7 +384,7 @@ comb_data_map_le <- joinCountryData2Map(
 #source of data: https://ec.europa.eu/eurostat/databrowser/view/HLTH_EHIS_MH1E/default/table?lang=en&category=hlth.hlth_state.hlth_sph
 
 #filters data from EU countries
-EU_LifeExpect <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "AUT" |
+EU_LifeExpect <- filter (LifeExpect, Country.Code == "POL" | Country.Code == "AUT" |
                             Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
                             Country.Code == "CYP" |
                             Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
@@ -395,6 +395,26 @@ EU_LifeExpect <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "A
                             Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
                             Country.Code == "SWE" | Country.Code == "HUN" | 
                             Country.Code == "ITA")
+
+#The Highest LE in the EU in 2019
+EU_HighLE <- EU_LifeExpect %>%
+  filter(X2019 == max(X2019, na.rm = T)) %>%
+  select(Country.Name, X2019) %>%
+  mutate(eu_hlifexp = round(X2019,1))
+
+#The Lowest Fertility Rate in the World in 2019
+EU_LowLE <- EU_LifeExpect%>%
+  filter(X2019 == min(X2019, na.rm = T)) %>%
+  select(Country.Name, X2019) %>%
+  mutate(eu_llifexp = round(X2019,1))
+
+#map LE in EU countries in 2019
+comb_data_map_eu_le <- joinCountryData2Map(
+  EU_LifeExpect,
+  joinCode = "ISO3",
+  nameJoinColumn = "Country.Code",
+  mapResolution = "high"
+)
 
 #adds data about depressive symptoms
 Depr_sympt <- c(8.4, 5.0, 4.2, 8.3, 9.4, 8.2, 2.7, 4.8, 10.8, 8.9, 4.2, 2.5,
@@ -408,3 +428,19 @@ Depr_GDP_EU_2019 <- data.frame(Country.Code, Depr_sympt, GDP_per_cap)
 
 #new data frame with depressive symptoms and GDP_per_capita
 EU_LifeExpect_depr_GDP <- left_join(EU_LifeExpect, Depr_GDP_EU_2019, by = "Country.Code")
+
+#correlation: Life expectancy and depressive symptoms
+cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$Depr_sympt, use = "complete.obs") 
+
+#correlation: Life expectancy and GDP
+cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs") 
+
+
+#ggpairs
+ggpLE <- ggpairs(EU_LifeExpect_depr_GDP, 
+              columns = c("X2019", "Depr_sympt", "GDP_per_cap"),
+              title = "Correlations",
+              columnLabels = c("Life expect", "Depression sympt", "GDP per cap"),
+              upper = list(continuous = wrap("cor", size = 2.5)),
+              lower = list(continuous = "smooth"))
+ggpLE

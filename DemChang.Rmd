@@ -123,7 +123,7 @@ __```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gd
 This graph shows the correlations between the variables discussed above. 
 
 ``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
-gg
+ggFR
 ```
 
 As we can see...
@@ -210,7 +210,7 @@ This is the list of countries with the largest life expectancy gains from 1960 t
 kable(top_10_hleg, col.names = c("Country", "The greatest increase since 1960 to 2019 (in years)"))
 ```
 
-This map show life expectrancy in 2019. 
+This map show life expectancy in 2019 in the whole world. 
 
 ```{r , echo=FALSE}
 mapCountryData(
@@ -220,3 +220,47 @@ mapCountryData(
   colourPalette = brewer.pal(7, "Purples")
 )
 ```
+
+The factors which have impact for life expectancy are among others:
+
+- income per capita, the rate of hospital beds, medical staff (Cervantes, López & Rambaud, 2019);
+
+- universal health coverage, child vaccination, sanitary conditions (Ranabhat et all., 2018);
+
+- real income per capita, educational level (Keneci & Murthy, 2017);
+
+- economic growth, health expenditure, clean water, improved sanitation conditions, carbon emission, access to drinking water (Rahman, Rana & Khanam, 2022)
+
+
+The country of EU with the highest life expectancy in 2019 is 
+__`r EU_HighLE$Country.Name`__. The life expectancy is 
+__`r EU_HighLE$eu_hlifexp`__.
+
+The country of EU with the lowest life expectancy in 2019 is 
+__`r EU_LowLE$Country.Name`__. The fertility rate is 
+__`r EU_LowLE$eu_llifexp`__.
+
+This map shows life expectancy in EU countries in 2019. 
+
+```{r , echo=FALSE, out.width="150%" }
+mapCountryData(
+  comb_data_map_eu_le,
+  mapTitle = "Life Expectancy in 2019 in EU",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "Purples")
+)
+```
+
+As we can see, the citizens of the Mediterranean basin, countries of the western and northern parts of the European Union achieve the longest life expectancy.
+
+Mental factors can also affect life expectancy. Therefore, it was checked whether depressive symptoms correlate with life expectancy in the EU countries. Correlation between __life expectancy__ and __depressive symptoms__ is
+__```r cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$Depr_sympt, use = "complete.obs") ```__ It is a weak correlation.
+
+This graph shows the correlations between the life expectancy, GDP (per capita) and depressive symptoms. 
+
+``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
+ggpLE
+```
+
+Correlation between __life expectancy__ and __GDP__ is
+__```r cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs")```__ - it is a strong correlation.
