@@ -104,11 +104,22 @@ ggplotly(plt)
 
 One another correlates of fertility rate could be GCP per capita, which is:
 
-> The indicator is calculated as the ratio of real GDP to the average population of a specific year. GDP measures the value of total final output of goods and services produced by an economy within a certain period of time. It includes goods and services that have markets (or which could have markets) and products which are produced by general government and non-profit institutions. It is a measure of economic activity and is also used as a proxy for the development in a country’s material living standards. However, it is a limited measure of economic welfare. For example, neither does GDP include most unpaid household work nor does GDP take account of negative effects of economic activity, like environmental degradation".
+> "The indicator is calculated as the ratio of real GDP to the average population of a specific year. GDP measures the value of total final output of goods and services produced by an economy within a certain period of time. It includes goods and services that have markets (or which could have markets) and products which are produced by general government and non-profit institutions. It is a measure of economic activity and is also used as a proxy for the development in a country’s material living standards. However, it is a limited measure of economic welfare. For example, neither does GDP include most unpaid household work nor does GDP take account of negative effects of economic activity, like environmental degradation".
 
 (data & definition source: https://ec.europa.eu/eurostat/databrowser/view/sdg_08_10/default/table).
 
-We want to check if GCP correlates with the factors discussed earlier.
+We want to check if GDP correlates with the factors, which we discussed earlier.
+
+Correlation between __fertility rate__ and __GDP__ is
+__```r cor(comb_data_agewom_fr_contr_gdp$X2019,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This correlation is really weak. But SD of fertility rate is low:  
+__```r sd(comb_data_agewom_fr_contr_gdp$X2019)```__ , what it means, that the values observed are centered around the mean.
+
+Correlation between __mean age at the birth of first child__ and __GDP__ is
+__```r cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This correlation is strong. 
+
+The situation is similar in the case of the next correlated pair of variables: __contraceptive methods__ and  __GDP__. Correlation is
+__```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs")```__ and it also strong. 
+
 
 
 __Death Rate__ (crude, per 1000 people) indicates: 

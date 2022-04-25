@@ -11,7 +11,6 @@ library("knitr")
 library("plotly")
 library("htmlwidgets")
 
-
 BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/birthRateCrudo.csv", 
                       stringsAsFactors = F)
 DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/death_rateCrudo.csv",
@@ -270,6 +269,24 @@ GDP_EU_2019 <- data.frame(Country.Code, GDP_per_cap)
 #joins data
 comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_2019, by = "Country.Code")
 
+#correlation: FR and GDP
+cor(comb_data_agewom_fr_contr_gdp$X2019,comb_data_agewom_fr_contr_gdp$GDP_per_cap)
+sd(comb_data_agewom_fr_contr_gdp$X2019)
+   
+#correlation: Mean age at the birth of first child and GDP
+cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)
+sd(comb_data_agewom_fr_contr_gdp$GDP_per_cap)
+
+#correlation: Prevalence of contraceptive methods and GDP
+cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs") 
+
+
+#ggpairs: Fertility rate and others factors
+ggpairs(comb_data_agewom_fr_contr_gdp, 
+        columns = c("X2019","OBS_VALUE", "AnyMethod", "GDP_per_cap"),
+        aes(color = "Country.Code"),
+        upper = list(continuous = wrap("cor", size = 2.5)),
+        lower = list(continuous = "smooth"))
 
 
 ### Death Rate
