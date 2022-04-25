@@ -123,7 +123,7 @@ __```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gd
 This graph shows the correlations between the variables discussed above. 
 
 ``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
-ggFR
+ggpFR
 ```
 
 As we can see...
@@ -158,6 +158,35 @@ mapCountryData(
   colourPalette = brewer.pal(7, "Blues")
 )
 ```
+
+The country with the highest death rate in 2019 in EU is 
+__`r EU_HighDeathRat$Country.Name`__. The death rate is 
+__`r EU_HighDeathRat$eu_hdr`__.
+
+The country with the lowest death rate in 2019 is 
+__`r EU_LowDeathRat$Country.Name`__. The death rate is 
+__`r EU_LowDeathRat$eu_ldr`__.
+
+
+
+This map show death rate in 2019 in EU. 
+
+```{r , echo=FALSE}
+mapCountryData(
+  comb_data_map_eu_dr,
+  mapTitle = "Death Rate in 2019 in EU",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "Blues")
+)
+```
+
+Animation shows death rate in Polan since 1960 to 2019:
+
+``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
+ggPL_DR
+```
+
+As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator.
 
 Birth Rate (crude, per 1000 people) is: 
 

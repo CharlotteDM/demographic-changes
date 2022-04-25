@@ -12,6 +12,11 @@ library("plotly")
 library("htmlwidgets")
 library("GGally")
 
+#install.packages("Hmisc")
+#library("Hmisc")
+#install.packages("ggstatsplot")
+#library("ggstatsplot")
+
 BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/birthRateCrudo.csv", 
                       stringsAsFactors = F)
 DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/death_rateCrudo.csv",
@@ -291,6 +296,7 @@ ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp,
 
 
 
+
 ### Death Rate
 #The Highest Death Rate in the World in 2019
 HighDeathRat <- DeathRate %>%
@@ -319,6 +325,66 @@ comb_data_map_dr <- joinCountryData2Map(
   nameJoinColumn = "Country.Code",
   mapResolution = "high"
 )
+
+
+#filter data from EU
+EU_DeathRate <- filter (DeathRate, Country.Code == "POL" | Country.Code == "AUT" |
+                            Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                            Country.Code == "CYP" |
+                            Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                            Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                            Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                            Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                            Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                            Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                            Country.Code == "SWE" | Country.Code == "HUN" | 
+                            Country.Code == "ITA")
+
+
+#The Highest Death Rate in the EU in 2019
+EU_HighDeathRat <- EU_DeathRate %>%
+  filter(X2019 == max(X2019, na.rm = T)) %>%
+  select(Country.Name, X2019) %>%
+  mutate(eu_hdr = round(X2019,1))
+
+#The Lowest Death Rate in the World in 2019
+EU_LowDeathRat <- EU_DeathRate %>%
+  filter(X2019 == min(X2019, na.rm = T)) %>%
+  select(Country.Name, X2019) %>%
+  mutate(eu_ldr = round(X2019,1))
+
+#map FR in EU countries in 2019
+comb_data_map_eu_dr <- joinCountryData2Map(
+  EU_DeathRate,
+  joinCode = "ISO3",
+  nameJoinColumn = "Country.Code",
+  mapResolution = "high"
+)
+
+#animations: Death Rate in Pl 
+
+year_dr_pl <- c(1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 
+                1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 
+                 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988,
+                 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997,
+                 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+                 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
+                 2016, 2017, 2018, 2019)
+
+EU_DeathRate[22, ]
+dr_pl <- c(7.6, 7.6, 7.9, 7.5, 7.6, 7.4, 7.4, 7.7, 7.6, 8.1, 8.2, 8.7, 8, 8.4, 8.2, 8.7, 8.9,
+           9, 9.4, 9.2, 9.8, 9.2, 9.3, 9.6, 10, 10.3, 10.1, 10.1, 9.9, 10.1, 10.2, 10.6,
+           10.3, 10.2, 10, 10, 10, 9.8, 9.7, 9.9, 9.6, 9.5, 9.4, 9.6, 9.5, 9.6, 9.7,
+           9.9, 10, 10.1, 9.9, 9.9, 10.1, 10.2, 9.9, 10.4, 10.2, 10.6, 10.9, 10.8)
+PL_DR <- data.frame(year_dr_pl, dr_pl)
+
+ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
+  geom_line() +
+  geom_point() +
+  ggtitle("Death rate in Poland") +
+  xlab("Year") +
+  ylab("Death rate") +
+  transition_reveal(year_dr_pl)
 
 ##Birth Rate
 #The Highest Birth Rate in the World in 2019
@@ -435,6 +501,13 @@ cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$Depr_sympt, use = "comp
 #correlation: Life expectancy and GDP
 cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs") 
 
+###rcorr(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs",
+     ###method = "pearson")
+   
+#other method   
+test <- cor.test(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs")
+test
+
 
 #ggpairs
 ggpLE <- ggpairs(EU_LifeExpect_depr_GDP, 
@@ -444,3 +517,5 @@ ggpLE <- ggpairs(EU_LifeExpect_depr_GDP,
               upper = list(continuous = wrap("cor", size = 2.5)),
               lower = list(continuous = "smooth"))
 ggpLE
+
+
