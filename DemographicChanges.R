@@ -166,8 +166,8 @@ ggFR <- ggplot(data = comb_data_agewom_fr) +
     subtitle = "in EU countries in 2019",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN
     https://ec.europa.eu/eurostat/databrowser/view/TPS00017/default/table?lang=en&category=demo.demo_fer)",
-    x = "Fertility Rate",
-    y = "Mean age", 
+    x = "Fertility rate",
+    y = "Mean age (at birth of first child)", 
     col = "EU Country") +
   theme(
     plot.title = element_text(color="royalblue4", size=14, face="bold"),
@@ -296,26 +296,29 @@ ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp,
 
 
 #regression
-comb_data_agewom_fr_contr_gdp$GDP_per_cap <- as.numeric(GDP_per_cap)
-comb_data_agewom_fr_contr_gdp$OBS_VALUE <- as.numeric(OBS_VALUE)
+
 
 exists("GDP_per_cap")
 exists("X2019")
 
 ls()
 
-###ggplot(comb_data_agewom_fr_contr_gdp, aes(x = X2019, y = AnyMethod) +
-         geom_point() +
-         geom_smooth(method = "lm") +
-         labs(x = "FR", y = "Contr meth"))
 
-
-regressionLM <- lm(X2019 ~ AnyMethod, data = comb_data_agewom_fr_contr_gdp)
+regressionLM <- lm(GDP_per_cap ~ AnyMethod, data = comb_data_agewom_fr_contr_gdp)
 regressionLM
 summary(regressionLM)
 
 
 ### Death Rate
+#remove rows with region or groups of countries
+
+DeathRate <- DeathRate[-c(2, 4, 8, 37, 62, 63, 64, 65, 66, 
+                    69, 74, 75, 96, 99, 103, 104, 105, 106, 
+                    108, 111, 129, 135, 136, 137, 140, 
+                    141, 143, 154, 157, 162, 171, 
+                    182, 184, 192, 199, 205, 216, 218, 219, 231, 232, 
+                    237, 239, 242, 242, 250, 260), ]
+
 #The Highest Death Rate in the World in 2019
 HighDeathRat <- DeathRate %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
