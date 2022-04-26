@@ -295,22 +295,8 @@ ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp,
         lower = list(continuous = "smooth"))
 
 
-#regression
-
-
-exists("GDP_per_cap")
-exists("X2019")
-
-ls()
-
-
-regressionLM <- lm(GDP_per_cap ~ AnyMethod, data = comb_data_agewom_fr_contr_gdp)
-regressionLM
-summary(regressionLM)
-
-
 ### Death Rate
-#remove rows with region or groups of countries
+#removes rows with region or groups of countries
 
 DeathRate <- DeathRate[-c(2, 4, 8, 37, 62, 63, 64, 65, 66, 
                     69, 74, 75, 96, 99, 103, 104, 105, 106, 
