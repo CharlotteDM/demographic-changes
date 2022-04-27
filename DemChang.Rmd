@@ -13,8 +13,6 @@ source("DemographicChanges.R")
 ```
 
 
-## __DISCUSSION__
-
 ## This is a report about demographic changes in the world since 1960 to 2019. For this report I choose selected demographic factors, like:
 
 - __Fertility Rate__,
@@ -23,7 +21,9 @@ source("DemographicChanges.R")
 - __Life Expectancy__
 
 
-###__Fertility Rate__ (total, births per woman) is:
+***
+
+__Fertility Rate__ (total, births per woman) is:
 
 > "rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year".
 
@@ -212,8 +212,14 @@ mapCountryData(
 
 This boxplot shows death rate in 2019.
 
-```{r boxplot_DR=plot, dev='png', out.width="150%", echo = FALSE}
+```{r boxplot_DR=plot, dev='png', out.width="150%", echo = FALSE, warning=FALSE}
 plot(boxplot_DR)
+```
+
+The highest death rate in 2019 is observed on the European continent, and the lowest - in Africa This is also confirmed by the calculations.
+
+```{r calcDR, echo=FALSE}
+kable(calcDR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Death rate in 2019 - selected statistics")
 ```
 
 

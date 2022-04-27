@@ -359,6 +359,16 @@ boxplot_DR <- ggplot (data = DeathRate, (aes(Continent_Name,X2019, color=Contine
 
 boxplot_DR
 
+#calculations
+
+calcDR <- as.data.frame(DeathRate %>%
+                          group_by(Continent_Name) %>%
+                          dplyr::summarise((AvgDR = round(mean(X2019, na.rm = T), 2)),
+                                           (MedDR = round(median(X2019, na.rm = T), 2)),
+                                           (SDDR = round(sd(X2019, na.rm = T), 2))))
+
+                   
+
 #filters data from EU
 EU_DeathRate <- filter (DeathRate, Country.Code == "POL" | Country.Code == "AUT" |
                             Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
@@ -488,9 +498,9 @@ BR_cont
 
 calcBR <- as.data.frame(BirthRate %>%
   group_by(Continent_Name) %>%
-  dplyr::summarise((AvgBR = mean(X2019, na.rm = T)),
-                   (MedBR = median(X2019, na.rm = T)),
-                   (SDBR = sd(X2019, na.rm = T))))
+  dplyr::summarise((AvgBR = round(mean(X2019, na.rm = T), 2)),
+                   (MedBR = round(median(X2019, na.rm = T), 2)),
+                   (SDBR = round(sd(X2019, na.rm = T), 2))))
 
 
 ##Life Expectation
