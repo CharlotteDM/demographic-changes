@@ -341,10 +341,11 @@ comb_data_map_dr <- joinCountryData2Map(
 )
 
 #joins data frames - Death Rate and Continents (notice: code for continent is below in the Birth Rate section)
-DeathRate <- left_join(DeathRate, continents, by = "Country.Code" )
+DeathRate_join <- left_join(DeathRate, continents, by = "Country.Code" )
+
 
 #boxplot: Death Rate in 2019
-boxplot_DR <- ggplot (data = DeathRate, (aes(Continent_Name,X2019, color=Continent_Name))) +
+boxplot_DR <- ggplot (data = DeathRate_join, (aes(Continent_Name,X2019, color=Continent_Name))) +
   geom_boxplot() +
   geom_jitter(width=0.15, alpha=0.3) +
   labs(
@@ -361,9 +362,11 @@ boxplot_DR <- ggplot (data = DeathRate, (aes(Continent_Name,X2019, color=Contine
 
 boxplot_DR
 
+
+
 #calculations
 
-calcDR <- as.data.frame(DeathRate %>%
+calcDR <- as.data.frame(DeathRate_join %>%
                           group_by(Continent_Name) %>%
                           dplyr::summarise((AvgDR = round(mean(X2019, na.rm = T), 2)),
                                            (MedDR = round(median(X2019, na.rm = T), 2)),
@@ -372,7 +375,7 @@ calcDR <- as.data.frame(DeathRate %>%
                    
 
 #filters data from EU
-EU_DeathRate <- filter (DeathRate, Country.Code == "POL" | Country.Code == "AUT" |
+EU_DeathRate <- filter (DeathRate_join, Country.Code == "POL" | Country.Code == "AUT" |
                             Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
                             Country.Code == "CYP" |
                             Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
@@ -384,6 +387,8 @@ EU_DeathRate <- filter (DeathRate, Country.Code == "POL" | Country.Code == "AUT"
                             Country.Code == "SWE" | Country.Code == "HUN" | 
                             Country.Code == "ITA")
 
+#removes duplicated row - Cyprus
+EU_DeathRate <- EU_DeathRate[-4, ]
 
 #The Highest Death Rate in the EU in 2019
 EU_HighDeathRat <- EU_DeathRate %>%
@@ -404,6 +409,24 @@ comb_data_map_eu_dr <- joinCountryData2Map(
   nameJoinColumn = "Country.Code",
   mapResolution = "high"
 )
+
+#chart: EU countries & Death Rate in 2019 
+eu_dr_chart <- ggplot(data = EU_DeathRate) + geom_col(aes(x = reorder(Country.Name, X2019), y = X2019, fill = X2019)) + 
+  scale_fill_gradient(low = "darkgreen", high = "darkred") +
+  coord_flip() +
+  theme_light() +
+  labs(
+    title = "Death rate in EU in 2019",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)",
+    x = "EU Country",
+    y = "Death rate") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold", hjust = 0.5),
+    axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
+    axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
+    legend.position = "none") 
+
+eu_dr_chart
 
 #animations: Death Rate in Pl 
 

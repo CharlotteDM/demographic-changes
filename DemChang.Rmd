@@ -237,6 +237,12 @@ The country with the lowest death rate in 2019 is
 __`r EU_LowDeathRat$Country.Name`__. The death rate is 
 __`r EU_LowDeathRat$eu_ldr`__.
 
+This is graphical representation of death rate in 2019.
+
+```{r , dev='png', out.width="150%", echo = FALSE, warning=FALSE}
+plot(eu_dr_chart)
+```
+
 
 This map show death rate in 2019 in EU. 
 
@@ -244,8 +250,10 @@ This map show death rate in 2019 in EU.
 mapCountryData(
   comb_data_map_eu_dr,
   mapTitle = "Death Rate in 2019 in EU",
+  mapRegion = "Europe",
   nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "Blues")
+  colourPalette = brewer.pal(7, "Blues"),
+  borderCol = "black"
 )
 ```
 
@@ -267,7 +275,7 @@ Animation shows death rate in one of the EU country - Poland since 1960 to 2019:
 ggPL_DR
 ```
 
-As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator.
+As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator
 (_More information in my next project_).
 
 ***
