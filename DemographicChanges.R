@@ -333,6 +333,23 @@ comb_data_map_dr <- joinCountryData2Map(
   mapResolution = "high"
 )
 
+#joins data frames - Death Rate and Continents (notice: code for continent is below in the Birth Rate section)
+DeathRate <- left_join(DeathRate, continents, by = "Country.Code" )
+
+#boxplot: Death Rate in 2019
+ggplot (data = DeathRate, (aes(Continent_Name,X2019, color=Continent_Name))) +
+  geom_boxplot() +
+  geom_jitter(width=0.15, alpha=0.3) +
+  labs(
+    title = "Death Rate in 2019",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)",
+    x = "Continent",
+    y = "Death Rate") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
+    axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
+    legend.position = "none")
 
 #filter data from EU
 EU_DeathRate <- filter (DeathRate, Country.Code == "POL" | Country.Code == "AUT" |
@@ -451,7 +468,7 @@ BR_cont <- ggplot(data = BirthRate) +
         axis.text.x = element_blank()) +
   labs(
     title = "Birth rate in the world in 2019",
-    subtitle = "(based on data from: https://data.worldbank.org/indicator/SH.DYN.NCOM.FE.ZS)",
+    subtitle = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)",
     x = "Country",
     y = "Birth rate") +
   theme(

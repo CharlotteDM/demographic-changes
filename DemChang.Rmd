@@ -13,11 +13,17 @@ library("htmlwidgets")
 ```
 
 
-## __Discussion__
+## __DISCUSSION__
 
-### This is a report about demographic changes in the world since 1960 to 2019. 
+## This is a report about demographic changes in the world since 1960 to 2019. For this report I choose selected demographic factors, like:
 
-__Fertility Rate__ (total, births per woman) is:
+- __Fertility Rate__,
+- __Birth Rate__,
+- __Death Rate__,
+- __Life Expectancy__
+
+
+###__Fertility Rate__ (total, births per woman) is:
 
 > "rate represents the number of children that would be born to a woman if she were to live to the end of her childbearing years and bear children in accordance with age-specific fertility rates of the specified year".
 
@@ -169,6 +175,9 @@ BR_cont
 
 The highest birth rate in 2019 is observed on the African continent, and the lowest - in Europe. This is also confirmed by the calculations.
 
+```{r calcBR, echo=FALSE}
+kable(calcBR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Birth rate in 2019 - selected statistics")
+```
 
 __Death Rate__ (crude, per 1000 people) indicates: 
 
