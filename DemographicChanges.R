@@ -176,9 +176,10 @@ ggFR <- ggplot(data = comb_data_agewom_fr) +
     y = "Mean age (at birth of first child)", 
     col = "EU Country") +
   theme(
-    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    plot.title = element_text(color="royalblue4", size=14, face="bold", hjust = 0.5),
     plot.subtitle = element_text(color="slateblue", size=8, face="italic"),
     plot.caption = element_text(color="deeppink", size=7),
+    plot.caption.position = "plot",
     axis.title.x = element_text(color="darkmagenta", size=10),
     axis.title.y = element_text(color="darkmagenta", size=10)
   ) 
@@ -221,9 +222,10 @@ ggCM <- ggplot(data = comb_data_agewom_fr_contr) +
     col = "EU Country",
     size = "Fertility Rate") +
   theme(
-    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    plot.title = element_text(color="royalblue4", size=14, face="bold", hjust = 0.5),
     plot.subtitle = element_text(color="slateblue", size=8, face="italic"),
     plot.caption = element_text(color="deeppink", size=7),
+    plot.caption.position = "plot",
     axis.title.x = element_text(color="darkmagenta", size=10),
     axis.title.y = element_text(color="darkmagenta", size=10)
   ) 
@@ -352,9 +354,10 @@ boxplot_DR <- ggplot (data = DeathRate, (aes(Continent_Name,X2019, color=Contine
     x = "Continent",
     y = "Death Rate") +
   theme(
-    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    plot.title = element_text(color="royalblue4", size=14, face="bold", hjust = 0.5),
     axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
     axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
+    plot.caption.position = "plot",
     legend.position = "none")
 
 boxplot_DR
@@ -483,12 +486,13 @@ BR_cont <- ggplot(data = BirthRate) +
         axis.text.x = element_blank()) +
   labs(
     title = "Birth rate in the world in 2019",
-    subtitle = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)",
     x = "Country",
     y = "Birth rate") +
   theme(
-    plot.title = element_text(color="darkgreen", size=14, face="bold"),
-    plot.subtitle = element_text(color = "black", size = 10), 
+    plot.title = element_text(color="darkgreen", size=14, face="bold", hjust = 0.5),
+    plot.caption = element_text(color = "black", size = 10), 
+    plot.caption.position = "plot",
     axis.title.x = element_text(color="darkgreen", size=14, face="bold"),
     axis.title.y = element_text(color="darkgreen", size=14, face="bold"))
 

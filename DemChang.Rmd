@@ -46,7 +46,7 @@ kable(top_10_hfr, col.names = c("Country", "Fertility Rate drop since 1960 to 20
 
 This map shows fertility rate in 2019. 
 
-```{r , echo=FALSE}
+```{r , echo=FALSE, out.width="150%"  }
 mapCountryData(
   comb_data_map_fr,
   mapTitle = "Fertility Rate in 2019",
@@ -161,7 +161,7 @@ kable(top_10_hbr, col.names = c("Country", "Birth Rate drop since 1960 to 2019")
 
 This map shows birth rate in 2019. 
 
-```{r , echo=FALSE}
+```{r , echo=FALSE, out.width="150%"}
 mapCountryData(
   comb_data_map_br,
   mapTitle = "Birth Rate in 2019",
@@ -206,7 +206,7 @@ kable(top_10_hdr, col.names = c("Country", "Death Rate increase since 1960 to 20
 
 This map show death rate in 2019. 
 
-```{r , echo=FALSE}
+```{r , echo=FALSE, out.width="150%"}
 mapCountryData(
   comb_data_map_dr,
   mapTitle = "Death Rate in 2019",
@@ -240,7 +240,7 @@ __`r EU_LowDeathRat$eu_ldr`__.
 
 This map show death rate in 2019 in EU. 
 
-```{r , echo=FALSE}
+```{r , echo=FALSE, out.width="150%" }
 mapCountryData(
   comb_data_map_eu_dr,
   mapTitle = "Death Rate in 2019 in EU",
@@ -268,6 +268,7 @@ ggPL_DR
 ```
 
 As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator.
+(_More information in my next project_).
 
 ***
 
@@ -293,7 +294,7 @@ kable(top_10_hleg, col.names = c("Country", "The greatest increase since 1960 to
 
 This map show life expectancy in 2019 in the whole world. 
 
-```{r , echo=FALSE}
+```{r , echo=FALSE, out.width="150%"  }
 mapCountryData(
   comb_data_map_le,
   mapTitle = "Life expectancy in 2019",
@@ -324,7 +325,7 @@ __`r EU_LowLE$eu_llifexp`__.
 
 This map shows life expectancy in EU countries in 2019. 
 
-```{r , echo=FALSE, out.width="150%" }
+```{r , echo=FALSE, out.width="150%"}
 mapCountryData(
   comb_data_map_eu_le,
   mapTitle = "Life Expectancy in 2019 in EU",
