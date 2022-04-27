@@ -5,11 +5,11 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-source("DemographicChanges.R")
 library("knitr")
 library("tidyverse")
 library("plotly")
 library("htmlwidgets")
+source("DemographicChanges.R")
 ```
 
 
@@ -210,6 +210,13 @@ mapCountryData(
 )
 ```
 
+This boxplot shows death rate in 2019.
+
+```{r boxplot_DR=plot, dev='png', out.width="150%", echo = FALSE}
+plot(boxplot_DR)
+```
+
+
 The country with the highest death rate in 2019 in EU is 
 __`r EU_HighDeathRat$Country.Name`__. The death rate is 
 __`r EU_HighDeathRat$eu_hdr`__.
@@ -217,7 +224,6 @@ __`r EU_HighDeathRat$eu_hdr`__.
 The country with the lowest death rate in 2019 is 
 __`r EU_LowDeathRat$Country.Name`__. The death rate is 
 __`r EU_LowDeathRat$eu_ldr`__.
-
 
 
 This map show death rate in 2019 in EU. 
