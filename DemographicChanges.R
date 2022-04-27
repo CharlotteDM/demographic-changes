@@ -31,6 +31,12 @@ LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/da
 AgeWom <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/AgeWomFirstChild.csv",
                    stringsAsFactors = F)
 
+continents <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/continents.csv",
+                       stringsAsFactors = F)
+colnames(continents)[5] <- "Country.Code"
+#(data source:https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c#file-country-and-continent-codes-list-csv-csv) )
+
+
 #The Highest Fertility Rate in the World in 2019
 HighFertRat <- FertRateTot %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
@@ -454,11 +460,8 @@ cor(FertRateTot$X2019, BirthRate$X2019, use = "complete.obs")
 
 #Small Multiples: BR & continents in 2019
 
-continents <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/continents.csv",
-                       stringsAsFactors = F)
-#(data source:https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c#file-country-and-continent-codes-list-csv-csv) )
 
-colnames(continents)[5] <- "Country.Code"
+
 
 BirthRate <- left_join(BirthRate, continents, by = "Country.Code" )
                                       
