@@ -6,7 +6,6 @@ library(ggrepel)
 library("rworldmap")
 library(rgeos)
 library("RColorBrewer")
-library(rstudioapi)
 library("knitr")
 library("plotly")
 library("htmlwidgets")
@@ -41,20 +40,20 @@ colnames(continents)[5] <- "Country.Code"
 HighFertRat <- FertRateTot %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(hfr = round(X2019,1))
+  mutate(hfr = round(X2019,2))
 
 #The Lowest Fertility Rate in the World in 2019
 LowFertRat <- FertRateTot %>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(lfr = round(X2019,1))
+  mutate(lfr = round(X2019,2))
 
 #The Top 10 Countries with The Highest Fertility Rate and FR difference declining from 1960 to 2019
 top_10_hfr <- FertRateTot %>%
   mutate(gain = X2019 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
-  mutate(gain_str = paste(format(round(gain, 1)), "births per woman")) %>%
+  mutate(gain_str = paste(format(round(gain, 2)), "births per woman")) %>%
   dplyr::select(Country.Name, gain_str)
  
 #world map & the Fertility Rate in 2019 (first att)
@@ -64,7 +63,6 @@ comb_data_map_fr <- joinCountryData2Map(
   nameJoinColumn = "Country.Code",
   mapResolution = "high"
 )
-
 
 #filters data from EU countries
 #filter data from EU
@@ -84,13 +82,13 @@ EU_FertRateTot <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "
 EU_HighFertRat <- EU_FertRateTot %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_hfr = round(X2019,1))
+  mutate(eu_hfr = round(X2019,2))
 
 #The Lowest Fertility Rate in the World in 2019
 EU_LowFertRat <- EU_FertRateTot %>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_lfr = round(X2019,1))
+  mutate(eu_lfr = round(X2019,2))
 
 #map FR in EU countries in 2019
 comb_data_map_eu_fr <- joinCountryData2Map(
@@ -99,6 +97,8 @@ comb_data_map_eu_fr <- joinCountryData2Map(
   nameJoinColumn = "Country.Code",
   mapResolution = "high"
 )
+
+
 
 #chart: EU countries & Fertility Rate in 2019 
 EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, X2019), y = X2019, fill = X2019)) + 
@@ -283,11 +283,11 @@ comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_201
 
 #correlation: FR and GDP
 cor(comb_data_agewom_fr_contr_gdp$X2019,comb_data_agewom_fr_contr_gdp$GDP_per_cap)
-sd(comb_data_agewom_fr_contr_gdp$X2019)
+round(sd(comb_data_agewom_fr_contr_gdp$X2019), 2)
    
 #correlation: Mean age at the birth of first child and GDP
 cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)
-sd(comb_data_agewom_fr_contr_gdp$GDP_per_cap)
+round(sd(comb_data_agewom_fr_contr_gdp$GDP_per_cap), 2)
 
 #correlation: Prevalence of contraceptive methods and GDP
 cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs") 
@@ -315,20 +315,20 @@ DeathRate <- DeathRate[-c(2, 4, 8, 37, 62, 63, 64, 65, 66,
 HighDeathRat <- DeathRate %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(hdr = round(X2019,1))
+  mutate(hdr = round(X2019,2))
 
 #The Lowest Death Rate in the World in 2019
 LowDeathRat <- DeathRate %>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(ldr = round(X2019,1))
+  mutate(ldr = round(X2019,2))
 
 #The Top 10 Countries with The Highest Death Rate and DR difference declining from 1960 to 2019
 top_10_hdr <- DeathRate %>%
   mutate(gain = X2019 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
-  mutate(gain_str = paste(format(round(gain, 1)), "crude (per 1000 people)")) %>%
+  mutate(gain_str = paste(format(round(gain, 2)), "crude (per 1000 people)")) %>%
   dplyr::select(Country.Name, gain_str)
 
 #world map & the Death Rate in 2019 
@@ -387,13 +387,13 @@ EU_DeathRate <- filter (DeathRate, Country.Code == "POL" | Country.Code == "AUT"
 EU_HighDeathRat <- EU_DeathRate %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_hdr = round(X2019,1))
+  mutate(eu_hdr = round(X2019,2))
 
 #The Lowest Death Rate in the World in 2019
 EU_LowDeathRat <- EU_DeathRate %>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_ldr = round(X2019,1))
+  mutate(eu_ldr = round(X2019,2))
 
 #map FR in EU countries in 2019
 comb_data_map_eu_dr <- joinCountryData2Map(
@@ -439,20 +439,20 @@ ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
 HighBirthRat <- BirthRate %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(hbr = round(X2019,1))
+  mutate(hbr = round(X2019,2))
 
 #The Lowest Birth Rate in the World in 2019
 LowBirthRat <- BirthRate %>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(lbr = round(X2019,1))
+  mutate(lbr = round(X2019,2))
 
 #The Top 10 Countries with The Highest Birth Rate and BR difference declining from 1960 to 2019
 top_10_hbr <- BirthRate %>%
   mutate(gain = X2019 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
-  mutate(gain_str = paste(format(round(gain, 1)), "crude (per 1000 people)")) %>%
+  mutate(gain_str = paste(format(round(gain, 2)), "crude (per 1000 people)")) %>%
   dplyr::select(Country.Name, gain_str)
 
 #world map & the Birth Rate in 2019 
@@ -508,20 +508,20 @@ calcBR <- as.data.frame(BirthRate %>%
 HighLifeExpect <- LifeExpect %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(hle = round(X2019,1))
+  mutate(hle = round(X2019,2))
 
 #The Lowest High Expectation in the World in 2019
 LowLifeExpect <- LifeExpect %>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(lle = round(X2019,1))
+  mutate(lle = round(X2019,2))
 
 #The Top 10 Countries with the Largest Life Expectancy gains since 1960 to 2019
 top_10_hleg <- LifeExpect %>%
   mutate(gain = X2019 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
-  mutate(gain_str = paste(format(round(gain, 1)), "total (years)")) %>%
+  mutate(gain_str = paste(format(round(gain, 2)), "total (years)")) %>%
   dplyr::select(Country.Name, gain_str)
 
 #world map & the Life Expectation in 2019 
@@ -553,13 +553,13 @@ EU_LifeExpect <- filter (LifeExpect, Country.Code == "POL" | Country.Code == "AU
 EU_HighLE <- EU_LifeExpect %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_hlifexp = round(X2019,1))
+  mutate(eu_hlifexp = round(X2019,2))
 
 #The Lowest Fertility Rate in the World in 2019
 EU_LowLE <- EU_LifeExpect%>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
   dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_llifexp = round(X2019,1))
+  mutate(eu_llifexp = round(X2019,2))
 
 #map LE in EU countries in 2019
 comb_data_map_eu_le <- joinCountryData2Map(

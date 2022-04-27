@@ -51,7 +51,8 @@ mapCountryData(
   comb_data_map_fr,
   mapTitle = "Fertility Rate in 2019",
   nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "RdPu")
+  colourPalette = brewer.pal(7, "RdPu"),
+  borderCol = "black"
 )
 ```
 
@@ -69,12 +70,12 @@ __`r EU_LowFertRat$eu_lfr`__.
 This map shows fertility rate in EU countries in 2019. 
 
 ```{r , echo=FALSE, out.width="150%" }
-mapCountryData(
-  comb_data_map_eu_fr,
-  mapTitle = "Fertility Rate in 2019 in EU",
-  nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "RdPu")
-)
+mapCountryData(comb_data_map_eu_fr, 
+               nameColumnToPlot = "X2019",
+               mapTitle = "Fertility Rate in 2019 in EU",
+               mapRegion = "Europe", 
+               colourPalette = brewer.pal(7, "RdPu"), 
+               borderCol = "black")
 ```
 
 This chart shows fertility rate in EU countries in 2019.
@@ -120,7 +121,7 @@ We want to check if GDP correlates with the factors, which we discussed earlier.
 
 Correlation between __fertility rate__ and __GDP__ is
 __```r cor(comb_data_agewom_fr_contr_gdp$X2019,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This correlation is really weak. But SD of fertility rate is low:  
-__```r sd(comb_data_agewom_fr_contr_gdp$X2019)```__ , what it means, that the values observed are centered around the mean value.
+__```r round(sd(comb_data_agewom_fr_contr_gdp$X2019), 2)```__ , what it means, that the values observed are centered around the mean value.
 
 Correlation between __mean age at the birth of first child__ and __GDP__ is
 __```r cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This is strong correlation. 
@@ -134,8 +135,9 @@ This graph shows the correlations between the variables discussed above.
 ggpFR
 ```
 
-As we can see...
+We can see how the results of the dependencies between pairs of variables are distributed as scatter plots. Correlations are presented numerically.
 
+***
 
 Birth Rate (crude, per 1000 people) is: 
 
@@ -144,12 +146,12 @@ Birth Rate (crude, per 1000 people) is:
 (data & definition source: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)
 
 The country with the highest birth rate in 2019 is 
-`r HighBirthRat$Country.Name`. The birth rate is 
-`r HighBirthRat$hbr`.
+__`r HighBirthRat$Country.Name`__. The birth rate is 
+__`r HighBirthRat$hbr`__.
 
 The country with the lowest birth rate in 2019 is 
-`r LowBirthRat$Country.Name`. The birth rate is 
-`r LowBirthRat$lbr`.
+__`r LowBirthRat$Country.Name`__. The birth rate is 
+__`r LowBirthRat$lbr`__.
 
 This is the list of countries with the highest birth rate (ordered by highest to lowest). Table shows birth rate difference declining from 1960 to 2019.
 
@@ -164,7 +166,8 @@ mapCountryData(
   comb_data_map_br,
   mapTitle = "Birth Rate in 2019",
   nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "Greens")
+  colourPalette = brewer.pal(7, "Greens"),
+  borderCol = "black"
 )
 ```
 
@@ -178,6 +181,8 @@ The highest birth rate in 2019 is observed on the African continent, and the low
 ```{r calcBR, echo=FALSE}
 kable(calcBR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Birth rate in 2019 - selected statistics")
 ```
+
+***
 
 __Death Rate__ (crude, per 1000 people) indicates: 
 
@@ -206,7 +211,8 @@ mapCountryData(
   comb_data_map_dr,
   mapTitle = "Death Rate in 2019",
   nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "Blues")
+  colourPalette = brewer.pal(7, "Blues"),
+  borderCol = "black"
 )
 ```
 
@@ -263,20 +269,21 @@ ggPL_DR
 
 As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator.
 
+***
 
-Life expectancy at birth (total, years): 
+__Life expectancy__ at birth (total, years): 
 
 >indicates the number of years a newborn infant would live if prevailing patterns of mortality at the time of its birth were to stay the same throughout its life.
 
 (data & definition source: https://data.worldbank.org/indicator/SP.DYN.LE00.IN)
 
 The country with the highest life expectancy in 2019 is 
-`r HighLifeExpect$Country.Name`. The life expectancy rate is 
-`r HighLifeExpect$hle`.
+__`r HighLifeExpect$Country.Name`__. The life expectancy rate is 
+__`r HighLifeExpect$hle`__.
 
 The country with the lowest life expectancy in 2019 is 
-`r LowLifeExpect$Country.Name`. The life expectatancy is 
-`r LowLifeExpect$lle`.
+__`r LowLifeExpect$Country.Name`__. The life expectancy is 
+__`r LowLifeExpect$lle`__.
 
 This is the list of countries with the largest life expectancy gains from 1960 to 2019
 
@@ -291,7 +298,8 @@ mapCountryData(
   comb_data_map_le,
   mapTitle = "Life expectancy in 2019",
   nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "Purples")
+  colourPalette = brewer.pal(7, "Purples"),
+  borderCol = "black"
 )
 ```
 
@@ -311,7 +319,7 @@ __`r EU_HighLE$Country.Name`__. The life expectancy is
 __`r EU_HighLE$eu_hlifexp`__.
 
 The country of EU with the lowest life expectancy in 2019 is 
-__`r EU_LowLE$Country.Name`__. The fertility rate is 
+__`r EU_LowLE$Country.Name`__. The life expectancy is 
 __`r EU_LowLE$eu_llifexp`__.
 
 This map shows life expectancy in EU countries in 2019. 
@@ -320,9 +328,10 @@ This map shows life expectancy in EU countries in 2019.
 mapCountryData(
   comb_data_map_eu_le,
   mapTitle = "Life Expectancy in 2019 in EU",
+  mapRegion = "Europe",
   nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "Purples")
-)
+  colourPalette = brewer.pal(7, "Purples"),
+  borderCol = "black")
 ```
 
 As we can see, the citizens of the Mediterranean basin, countries of the western and northern parts of the European Union achieve the longest life expectancy.
@@ -338,3 +347,7 @@ ggpLE
 
 Correlation between __life expectancy__ and __GDP__ is
 __```r cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs")```__ - it is a strong correlation.
+
+***
+
+In summary, we see fertility rate and birth rate falling over the years, while death rate and life expectancy are increasing. It is very important to follow dmeographic changes in countries and individual parts of the world so that governments can react early and shape their policies on public health, pro-family policies, etc.It is impossible to track demographic changes in isolation from the data on armed conflicts and the related migration of people, climate change, and the pandemic situation. 
