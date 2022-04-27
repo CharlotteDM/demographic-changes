@@ -151,7 +151,7 @@ This is the list of countries with the highest birth rate (ordered by highest to
 kable(top_10_hbr, col.names = c("Country", "Birth Rate drop since 1960 to 2019"))
 ```
 
-This map show birth rate in 2019. 
+This map shows birth rate in 2019. 
 
 ```{r , echo=FALSE}
 mapCountryData(
@@ -162,7 +162,12 @@ mapCountryData(
 )
 ```
 
+This chart shows birth rate in the whole world in 2019 divided into continents.
+``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
+BR_cont
+```
 
+The highest birth rate in 2019 is observed on the African continent, and the lowest - in Europe. This is also confirmed by the calculations.
 
 
 __Death Rate__ (crude, per 1000 people) indicates: 

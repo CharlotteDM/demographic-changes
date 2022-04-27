@@ -403,13 +403,13 @@ ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
 #The Highest Birth Rate in the World in 2019
 HighBirthRat <- BirthRate %>%
   filter(X2019 == max(X2019, na.rm = T)) %>%
-  select(Country.Name, X2019) %>%
+  dplyr::select(Country.Name, X2019) %>%
   mutate(hbr = round(X2019,1))
 
 #The Lowest Birth Rate in the World in 2019
 LowBirthRat <- BirthRate %>%
   filter(X2019 == min(X2019, na.rm = T)) %>%
-  select(Country.Name, X2019) %>%
+  dplyr::select(Country.Name, X2019) %>%
   mutate(lbr = round(X2019,1))
 
 #The Top 10 Countries with The Highest Birth Rate and BR difference declining from 1960 to 2019
@@ -418,7 +418,7 @@ top_10_hbr <- BirthRate %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
   mutate(gain_str = paste(format(round(gain, 1)), "crude (per 1000 people)")) %>%
-  select(Country.Name, gain_str)
+  dplyr::select(Country.Name, gain_str)
 
 #world map & the Birth Rate in 2019 
 comb_data_map_br <- joinCountryData2Map(
@@ -445,7 +445,7 @@ BirthRate <- left_join(BirthRate, continents, by = "Country.Code" )
                                       
                                       
 BR_cont <- ggplot(data = BirthRate) +
-  geom_point(mapping = aes(x = Country.Code, y = X2019), color = "blue") +
+  geom_point(mapping = aes(x = Country.Code, y = X2019), color = "green") +
   facet_wrap(~ Continent_Name,nrow = 1, scales = "free_x") +
   theme(axis.ticks.x = element_blank(),
         axis.text.x = element_blank()) +
@@ -455,11 +455,20 @@ BR_cont <- ggplot(data = BirthRate) +
     x = "Country",
     y = "Birth rate") +
   theme(
-    plot.title = element_text(color="royalblue4", size=14, face="bold"),
-    axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
-    axis.title.y = element_text(color="steelblue2", size=14, face="bold"))
+    plot.title = element_text(color="darkgreen", size=14, face="bold"),
+    plot.subtitle = element_text(color = "black", size = 10), 
+    axis.title.x = element_text(color="darkgreen", size=14, face="bold"),
+    axis.title.y = element_text(color="darkgreen", size=14, face="bold"))
 
 BR_cont
+
+#calculations
+
+calcBR <- as.data.frame(BirthRate %>%
+  group_by(Continent_Name) %>%
+  dplyr::summarise((AvgBR = mean(X2019, na.rm = T)),
+                   (MedBR = median(X2019, na.rm = T)),
+                   (SDBR = sd(X2019, na.rm = T))))
 
 
 ##Life Expectation
