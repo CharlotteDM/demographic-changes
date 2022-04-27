@@ -49,10 +49,12 @@ mapCountryData(
 )
 ```
 
+Fertility rate drops globally. 
+
 The country of EU with the highest fertility rate in 2019 is 
 __`r EU_HighFertRat$Country.Name`__. The fertility rate is 
 __`r EU_HighFertRat$eu_hfr`__.
-The high fertility rate in France is the result of counting a combined result with dependent territories in the whole world (e.g. French Guiana).
+The high fertility rate in France is the result of counting a combined result with dependent territories in the whole world (e.g. French Guiana, French Polynesia, Martinique).
 
 The country of EU with the lowest fertility rate in 2019 is 
 __`r EU_LowFertRat$Country.Name`__. The fertility rate is 
@@ -75,34 +77,34 @@ This chart shows fertility rate in EU countries in 2019.
 plot(EU_FR)
 ```
 
-There are many correlates of the fertility rate. One of them is the age of the mother when she gives birth to her first child. 
-Correlation between fertility rate and mean age of woman at birth first child is
+There are many correlates of the fertility rate. One of them is the age of the mother when she gives birth of her first child. 
+Correlation between fertility rate and mean age of woman at birth of first child is
 __```r cor(comb_data_agewom_fr$X2019, comb_data_agewom_fr$OBS_VALUE, use = "complete.obs")```__
-The higher the age of birth of the first child, the lower the fertility rate.
+The higher the age of birth of first child, the lower the fertility rate.
 
-This chart shows fertility rate and mean age of woman at birth first child (in EU countries in 2019).
+This chart shows fertility rate and mean age of woman at birth of first child (in EU countries in 2019).
 
 ```{r ggFR=plot, dev='png', out.width="150%", echo = FALSE}
 plot(ggFR)
 ```
 
-As we can see in Eastern European countries belonging to the EU, the fertility rate is higher and the age of women giving birth to the first child is lower than in other EU countries
+As we can see in Eastern European countries belonging to the EU, the fertility rate is higher and the age of women giving birth to the first child is lower than in other EU countries.
 
 One of the potential correlates of fertility rate and the age at which women give birth to first child may be a greater prevalence of contraception and therefore - more frequent use of it.
 Correlation between fertility rate and prevalence of contraceptive methods is
-__```r cor(comb_data_agewom_fr_contr$X2019, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")```__ This correlation is really weak. 
+__```r cor(comb_data_agewom_fr_contr$X2019, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")```__ This correlation is very weak. 
 
 (Source of data about prevalence of contraceptive methods in EU countries: https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/files/documents/2020/Jan/un_2019_contraceptiveusebymethod_databooklet.pdf)
 
 
-This interactive graph shows the distribution of the variables: the fertility rate, the average age of the first child's birth, and the prevalence of contraception used (click dot on chart for more information).
+This interactive graph shows the distribution of the variables: the fertility rate, the average age of the first child's birth, and the prevalence of contraception used (hover over a dot on chart for more information).
 
 ```{r plt=ggplotly, out.width="110%", echo=FALSE, error=FALSE, warning=FALSE}
 ggplotly(plt)
 ```
 
 
-One another correlates of fertility rate could be GCP per capita, which is:
+Another correlates of fertility rate could be GCP per capita, which is:
 
 > "The indicator is calculated as the ratio of real GDP to the average population of a specific year. GDP measures the value of total final output of goods and services produced by an economy within a certain period of time. It includes goods and services that have markets (or which could have markets) and products which are produced by general government and non-profit institutions. It is a measure of economic activity and is also used as a proxy for the development in a country’s material living standards. However, it is a limited measure of economic welfare. For example, neither does GDP include most unpaid household work nor does GDP take account of negative effects of economic activity, like environmental degradation".
 
@@ -112,13 +114,13 @@ We want to check if GDP correlates with the factors, which we discussed earlier.
 
 Correlation between __fertility rate__ and __GDP__ is
 __```r cor(comb_data_agewom_fr_contr_gdp$X2019,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This correlation is really weak. But SD of fertility rate is low:  
-__```r sd(comb_data_agewom_fr_contr_gdp$X2019)```__ , what it means, that the values observed are centered around the mean.
+__```r sd(comb_data_agewom_fr_contr_gdp$X2019)```__ , what it means, that the values observed are centered around the mean value.
 
 Correlation between __mean age at the birth of first child__ and __GDP__ is
-__```r cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This correlation is strong. 
+__```r cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This is strong correlation. 
 
 The situation is similar in the case of the next correlated pair of variables: __contraceptive methods__ and  __GDP__. Correlation is
-__```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs")```__ and it also strong. 
+__```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs")```__ and  also is strong. 
 
 This graph shows the correlations between the variables discussed above. 
 
@@ -127,6 +129,41 @@ ggpFR
 ```
 
 As we can see...
+
+
+Birth Rate (crude, per 1000 people) is: 
+
+>Crude birth rate indicates the number of live births occurring during the year, per 1,000 population estimated at midyear. Subtracting the crude death rate from the crude birth rate provides the rate of natural increase, which is equal to the rate of population change in the absence of migration.
+
+(data & definition source: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)
+
+The country with the highest birth rate in 2019 is 
+`r HighBirthRat$Country.Name`. The birth rate is 
+`r HighBirthRat$hbr`.
+
+The country with the lowest birth rate in 2019 is 
+`r LowBirthRat$Country.Name`. The birth rate is 
+`r LowBirthRat$lbr`.
+
+This is the list of countries with the highest birth rate (ordered by highest to lowest). Table shows birth rate difference declining from 1960 to 2019.
+
+```{r top_10_hbr, echo=FALSE}
+kable(top_10_hbr, col.names = c("Country", "Birth Rate drop since 1960 to 2019"))
+```
+
+This map show birth rate in 2019. 
+
+```{r , echo=FALSE}
+mapCountryData(
+  comb_data_map_br,
+  mapTitle = "Birth Rate in 2019",
+  nameColumnToPlot = "X2019",
+  colourPalette = brewer.pal(7, "Greens")
+)
+```
+
+
+
 
 __Death Rate__ (crude, per 1000 people) indicates: 
 
@@ -142,7 +179,7 @@ The country with the lowest death rate in 2019 is
 __`r LowDeathRat$Country.Name`__. The death rate is 
 __`r LowDeathRat$ldr`__.
 
-This is the list of countries with the highest death rate (ordered by highest to lowest). Table shows death rate difference declining from 1960 to 2019.
+This is the list of countries with the highest death rate (ordered by highest to lowest). Table shows death rate difference increasing from 1960 to 2019.
 
 ```{r top_10_hdr, echo=FALSE}
 kable(top_10_hdr, col.names = c("Country", "Death Rate increase since 1960 to 2019"))
@@ -180,7 +217,19 @@ mapCountryData(
 )
 ```
 
-Animation shows death rate in Polan since 1960 to 2019:
+Reasons for increasing the death rate (in EU in 2017) are:
+
+- circulatory disease (37%),
+- cancer(25%),
+- other (17%) like: mental and behavioral disorders, endocrine, nutriitional and metabolic deseases, and all remaining causes,
+- respiratory diseases (8%),
+- external causes of death (5%),
+- diseases of digestive system (4%),
+- diseases of the nervous system (4%)
+
+(source: https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Causes_of_death_statistics#Major_causes_of_death_in_the_EU_in_2017)
+
+Animation shows death rate in one of the EU country - Poland since 1960 to 2019:
 
 ``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
 ggPL_DR
@@ -188,36 +237,6 @@ ggPL_DR
 
 As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator.
 
-Birth Rate (crude, per 1000 people) is: 
-
->Crude birth rate indicates the number of live births occurring during the year, per 1,000 population estimated at midyear. Subtracting the crude death rate from the crude birth rate provides the rate of natural increase, which is equal to the rate of population change in the absence of migration.
-
-(data & definition source: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)
-
-The country with the highest birth rate in 2019 is 
-`r HighBirthRat$Country.Name`. The birth rate is 
-`r HighBirthRat$hbr`.
-
-The country with the lowest birth rate in 2019 is 
-`r LowBirthRat$Country.Name`. The birth rate is 
-`r LowBirthRat$lbr`.
-
-This is the list of countries with the highest birth rate (ordered by highest to lowest). Table shows birth rate difference declining from 1960 to 2019.
-
-```{r top_10_hbr, echo=FALSE}
-kable(top_10_hbr, col.names = c("Country", "Birth Rate drop since 1960 to 2019"))
-```
-
-This map show birth rate in 2019. 
-
-```{r , echo=FALSE}
-mapCountryData(
-  comb_data_map_br,
-  mapTitle = "Birth Rate in 2019",
-  nameColumnToPlot = "X2019",
-  colourPalette = brewer.pal(7, "Greens")
-)
-```
 
 Life expectancy at birth (total, years): 
 

@@ -394,6 +394,11 @@ ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
   ylab("Death rate") +
   transition_reveal(year_dr_pl)
 
+
+
+# causes of death in Poland 2021
+
+
 ##Birth Rate
 #The Highest Birth Rate in the World in 2019
 HighBirthRat <- BirthRate %>%
@@ -422,6 +427,39 @@ comb_data_map_br <- joinCountryData2Map(
   nameJoinColumn = "Country.Code",
   mapResolution = "high"
 )
+
+#correlation: FR and BR in the whole world
+
+cor(FertRateTot$X2019, BirthRate$X2019, use = "complete.obs")
+
+
+#Small Multiples: BR & continents in 2019
+
+continents <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/continents.csv",
+                       stringsAsFactors = F)
+#(data source:https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c#file-country-and-continent-codes-list-csv-csv) )
+
+colnames(continents)[5] <- "Country.Code"
+
+BirthRate <- left_join(BirthRate, continents, by = "Country.Code" )
+                                      
+                                      
+BR_cont <- ggplot(data = BirthRate) +
+  geom_point(mapping = aes(x = Country.Code, y = X2019), color = "blue") +
+  facet_wrap(~ Continent_Name,nrow = 1, scales = "free_x") +
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x = element_blank()) +
+  labs(
+    title = "Birth rate in the world in 2019",
+    subtitle = "(based on data from: https://data.worldbank.org/indicator/SH.DYN.NCOM.FE.ZS)",
+    x = "Country",
+    y = "Birth rate") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
+    axis.title.y = element_text(color="steelblue2", size=14, face="bold"))
+
+BR_cont
 
 
 ##Life Expectation
