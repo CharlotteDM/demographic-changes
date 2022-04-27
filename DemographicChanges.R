@@ -106,13 +106,12 @@ EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, 
   coord_flip() +
   theme_light() +
   labs(
-    title = "Fertility rate in EU in 2019",
-    subtitle = "(births per woman)",
+    title = "Fertility rate in EU in 2019 (births per woman)",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)",
     x = "EU Country",
     y = "Fertility rate") +
   theme(
-    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    plot.title = element_text(color="royalblue4", size=14, face="bold", hjust = 0.5),
     axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
     axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
     legend.position = "none") 
@@ -592,9 +591,7 @@ cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$Depr_sympt, use = "comp
 #correlation: Life expectancy and GDP
 cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs") 
 
-###rcorr(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs",
-     ###method = "pearson")
-   
+
 #other method   
 test <- cor.test(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs")
 test
@@ -610,4 +607,3 @@ ggpLE <- ggpairs(EU_LifeExpect_depr_GDP,
 ggpLE
 
 
-is.data.frame(continents)
