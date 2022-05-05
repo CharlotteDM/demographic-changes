@@ -178,11 +178,10 @@ EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, 
     axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
     legend.position = "none") 
 
-### Mean age of women at birth of first child - preparing df
-MeanAgeWom <- select(AgeWom, indic_de:OBS_VALUE) 
-MeanAgeWom2020 <- filter(MeanAgeWom, 
-                     indic_de=="AGEMOTH",
+### Mean age of women at birth of first child - preparing df with data from 2020
+MeanAgeWom2020 <- filter(AgeWom,
                      TIME_PERIOD==2020)
+
 # Mean age of women at birth of first child - replacing country code
 MeanAgeWom2020[MeanAgeWom2020 == "BE"] <- "BEL"
 MeanAgeWom2020[MeanAgeWom2020 == "BG"] <- "BGR"
@@ -218,10 +217,10 @@ MeanAgeWom2020 <- MeanAgeWom2020[-c(1, 5, 10, 11, 15, 21, 23, 27, 28, 31, 35, 39
 # Mean age of women at birth of first child - renaming column's name
 MeanAgeWom2020 <- MeanAgeWom2020 %>% rename(Country.Code = geo)
 
-# Removing column
-MeanAgeWom2020$TIME_PERIOD <- NULL
+# Removes columns
+MeanAgeWom2020 <- subset (MeanAgeWom2020, select = -c(1:4, 6, 8))
 
-# Renaming column
+# Renames column
 MeanAgeWom2020 <- MeanAgeWom2020 %>% rename(Mean_Age = OBS_VALUE)
 
 # Mean age of women at birth of first child - joining df's
@@ -232,7 +231,7 @@ cor(comb_data_agewom_fr$X2020, comb_data_agewom_fr$Mean_Age, use = "complete.obs
 
 # Mean age of women at birth of first child & fertility rate - chart
 ggFR <- ggplot(data = comb_data_agewom_fr) +
-  geom_text(mapping = aes(x = X2020, y = OBS_VALUE, label = Country.Code)) +
+  geom_text(mapping = aes(x = X2020, y = Mean_Age, label = Country.Code)) +
   theme_light() +
   labs(
     title = "Fertility rate & mean age of woman at birth of first child",

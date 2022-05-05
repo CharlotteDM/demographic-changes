@@ -13,7 +13,7 @@ source("DemographicChanges.R")
 ```
 
 
-## This is a report about demographic changes in the world since 1960 to 2019. For this report I choose selected demographic factors, like:
+## This is a report about demographic changes in the world since 1960 to 2020. For this report I choose selected demographic factors, like:
 
 - __Fertility Rate__,
 - __Birth Rate__,
@@ -30,27 +30,27 @@ __Fertility Rate__ (total, births per woman) is:
 (source of definition & data: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)
 
 
-The country with the highest fertility rate in 2019 is 
+The country with the highest fertility rate in 2020 is 
 __`r HighFertRat$Country.Name`__. The fertility rate is 
 __`r HighFertRat$hfr`__.
 
-The country with the lowest fertility rate in 2019 is 
+The country with the lowest fertility rate in 2020 is 
 __`r LowFertRat$Country.Name`__. The fertility rate is 
 __`r LowFertRat$lfr`__.
 
-This is the list of countries with the highest fertility rate (ordered by highest to lowest). Table shows fertility rate difference declining from 1960 to 2019.
+This is the list of countries with the highest fertility rate (ordered by highest to lowest). Table shows fertility rate difference declining from 1960 to 2020.
 
 ```{r top_10_hfr, echo=FALSE}
-kable(top_10_hfr, col.names = c("Country", "Fertility Rate drop since 1960 to 2019"))
+kable(top_10_hfr, col.names = c("Country", "Fertility Rate drop since 1960 to 2020"))
 ```
 
-This map shows fertility rate in 2019. 
+This map shows fertility rate in 2020. 
 
 ```{r , echo=FALSE, out.width="150%"  }
 mapCountryData(
   comb_data_map_fr,
-  mapTitle = "Fertility Rate in 2019",
-  nameColumnToPlot = "X2019",
+  mapTitle = "Fertility Rate in 2020",
+  nameColumnToPlot = "X2020",
   colourPalette = brewer.pal(7, "RdPu"),
   borderCol = "black"
 )
@@ -58,27 +58,27 @@ mapCountryData(
 
 Fertility rate drops globally. 
 
-The country of EU with the highest fertility rate in 2019 is 
+The country of EU with the highest fertility rate in 2020 is 
 __`r EU_HighFertRat$Country.Name`__. The fertility rate is 
 __`r EU_HighFertRat$eu_hfr`__.
 The high fertility rate in France is the result of counting a combined result with dependent territories in the whole world (e.g. French Guiana, French Polynesia, Martinique).
 
-The country of EU with the lowest fertility rate in 2019 is 
+The country of EU with the lowest fertility rate in 2020 is 
 __`r EU_LowFertRat$Country.Name`__. The fertility rate is 
 __`r EU_LowFertRat$eu_lfr`__.
 
-This map shows fertility rate in EU countries in 2019. 
+This map shows fertility rate in EU countries in 2020. 
 
 ```{r , echo=FALSE, out.width="150%" }
 mapCountryData(comb_data_map_eu_fr, 
-               nameColumnToPlot = "X2019",
-               mapTitle = "Fertility Rate in 2019 in EU",
+               nameColumnToPlot = "X2020",
+               mapTitle = "Fertility Rate in 2020 in EU",
                mapRegion = "Europe", 
                colourPalette = brewer.pal(7, "RdPu"), 
                borderCol = "black")
 ```
 
-This chart shows fertility rate in EU countries in 2019.
+This chart shows fertility rate in EU countries in 2020.
 
 ```{r EU_FR=plot, dev='png', out.width="150%", echo=FALSE}
 plot(EU_FR)
@@ -86,7 +86,7 @@ plot(EU_FR)
 
 There are many correlates of the fertility rate. One of them is the age of the mother when she gives birth of her first child. 
 Correlation between fertility rate and mean age of woman at birth of first child is
-__```r cor(comb_data_agewom_fr$X2019, comb_data_agewom_fr$OBS_VALUE, use = "complete.obs")```__
+__```r cor(comb_data_agewom_fr$X2020, comb_data_agewom_fr$Mean_Age, use = "complete.obs")```__
 The higher the age of birth of first child, the lower the fertility rate.
 
 This chart shows fertility rate and mean age of woman at birth of first child (in EU countries in 2019).
@@ -99,7 +99,7 @@ As we can see in Eastern European countries belonging to the EU, the fertility r
 
 One of the potential correlates of fertility rate and the age at which women give birth to first child may be a greater prevalence of contraception and therefore - more frequent use of it.
 Correlation between fertility rate and prevalence of contraceptive methods is
-__```r cor(comb_data_agewom_fr_contr$X2019, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")```__ This correlation is very weak. 
+__```r cor(comb_data_agewom_fr_contr$X2020, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")```__ This correlation is very weak. 
 
 (Source of data about prevalence of contraceptive methods in EU countries: https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/files/documents/2020/Jan/un_2019_contraceptiveusebymethod_databooklet.pdf)
 
@@ -120,14 +120,14 @@ Another correlates of fertility rate could be GCP per capita, which is:
 We want to check if GDP correlates with the factors, which we discussed earlier.
 
 Correlation between __fertility rate__ and __GDP__ is
-__```r cor(comb_data_agewom_fr_contr_gdp$X2019,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This correlation is really weak. But SD of fertility rate is low:  
-__```r round(sd(comb_data_agewom_fr_contr_gdp$X2019), 2)```__ , what it means, that the values observed are centered around the mean value.
+__```r cor(comb_data_agewom_fr_contr_gdp$X2020,comb_data_agewom_fr_contr_gdp$GDP_per_cap2020)```__ This correlation is really weak. But SD of fertility rate is low:  
+__```r round(sd(comb_data_agewom_fr_contr_gdp$X2020), 2)```__ , what it means, that the values observed are centered around the mean value.
 
 Correlation between __mean age at the birth of first child__ and __GDP__ is
-__```r cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)```__ This is strong correlation. 
+__```r cor(comb_data_agewom_fr_contr_gdp$Mean_Age,comb_data_agewom_fr_contr_gdp$GDP_per_cap2020)```__ This is strong correlation. 
 
 The situation is similar in the case of the next correlated pair of variables: __contraceptive methods__ and  __GDP__. Correlation is
-__```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs")```__ and  also is strong. 
+__```r cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, use = "complete.obs")```__ and  also is strong. 
 
 This graph shows the correlations between the variables discussed above. 
 
@@ -353,7 +353,7 @@ mapCountryData(
 As we can see, the citizens of the Mediterranean basin, countries of the western and northern parts of the European Union achieve the longest life expectancy.
 
 Mental factors can also affect life expectancy. Therefore, it was checked whether depressive symptoms correlate with life expectancy in the EU countries. Correlation between __life expectancy__ and __depressive symptoms__ is
-__```r cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$Depr_sympt, use = "complete.obs") ```__ It is a weak correlation.
+__```r cor(EU_LifeExpect_depr$X2020, EU_LifeExpect_depr$Depr_sympt, use = "complete.obs") ```__ It is a weak correlation.
 
 This graph shows the correlations between the life expectancy, GDP (per capita) and depressive symptoms. 
 
@@ -362,7 +362,7 @@ ggpLE
 ```
 
 Correlation between __life expectancy__ and __GDP__ is
-__```r cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs")```__ - it is a strong correlation.
+__```r cor(EU_LifeExpect_depr$X2020, comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, use = "complete.obs")```__ - it is a strong correlation.
 
 ***
 
