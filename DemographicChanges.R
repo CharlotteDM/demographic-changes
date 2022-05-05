@@ -21,16 +21,20 @@ BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/d
 DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/DeathRate_update.csv",
                       stringsAsFactors = F,
                       skip = 4)
-FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/fertilityRateTotal.csv",
-                        stringsAsFactors = F)
+FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/FertilityRate_update.csv",
+                        stringsAsFactors = F,
+                        skip = 4)
 LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancy_update.csv",
                        stringsAsFactors = F,
                        skip = 4)
 LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/laborFem.csv",
                      stringsAsFactors = F,
                      skip = 4)
-AgeWom <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/AgeWomFirstChild.csv",
+AgeWom <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/Age WomFirstChild_update.csv",
                    stringsAsFactors = F)
+
+GDP_EU <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/GDP_EU_update.csv",
+                        stringsAsFactors = F)
 
 continents <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/continents.csv",
                        stringsAsFactors = F)
@@ -94,27 +98,27 @@ EUonly_MR_20202022 <- filter (EU_MR_20202022, geo == "POL" | geo == "AUT" |
 
 
 
-#The Highest Fertility Rate in the World in 2019
+#The Highest Fertility Rate in the World in 2020
 HighFertRat <- FertRateTot %>%
-  filter(X2019 == max(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(hfr = round(X2019,2))
+  filter(X2020 == max(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(hfr = round(X2020,2))
 
-#The Lowest Fertility Rate in the World in 2019
+#The Lowest Fertility Rate in the World in 2020
 LowFertRat <- FertRateTot %>%
-  filter(X2019 == min(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(lfr = round(X2019,2))
+  filter(X2020 == min(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(lfr = round(X2020,2))
 
-#The Top 10 Countries with The Highest Fertility Rate and FR difference declining from 1960 to 2019
+#The Top 10 Countries with The Highest Fertility Rate and FR difference declining from 1960 to 2020
 top_10_hfr <- FertRateTot %>%
-  mutate(gain = X2019 - X1960) %>%
+  mutate(gain = X2020 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
   mutate(gain_str = paste(format(round(gain, 2)), "births per woman")) %>%
   dplyr::select(Country.Name, gain_str)
  
-#world map & the Fertility Rate in 2019 (first att)
+#world map & the Fertility Rate in 2020 
 comb_data_map_fr <- joinCountryData2Map(
   FertRateTot,
   joinCode = "ISO3",
@@ -136,19 +140,19 @@ EU_FertRateTot <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "
                 Country.Code == "SWE" | Country.Code == "HUN" | 
                 Country.Code == "ITA")
 
-#The Highest Fertility Rate in the EU in 2019
+#The Highest Fertility Rate in the EU in 2020
 EU_HighFertRat <- EU_FertRateTot %>%
-  filter(X2019 == max(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_hfr = round(X2019,2))
+  filter(X2020 == max(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(eu_hfr = round(X2020,2))
 
-#The Lowest Fertility Rate in the World in 2019
+#The Lowest Fertility Rate in the World in 2020
 EU_LowFertRat <- EU_FertRateTot %>%
-  filter(X2019 == min(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_lfr = round(X2019,2))
+  filter(X2020 == min(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(eu_lfr = round(X2020,2))
 
-#map FR in EU countries in 2019
+#map FR in EU countries in 2020
 comb_data_map_eu_fr <- joinCountryData2Map(
   EU_FertRateTot,
   joinCode = "ISO3",
@@ -158,13 +162,13 @@ comb_data_map_eu_fr <- joinCountryData2Map(
 
 
 
-#chart: EU countries & Fertility Rate in 2019 
-EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, X2019), y = X2019, fill = X2019)) + 
+#chart: EU countries & Fertility Rate in 2020
+EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, X2020), y = X2020, fill = X2020)) + 
   scale_fill_gradient(low="lightblue", high="red") +
   coord_flip() +
   theme_light() +
   labs(
-    title = "Fertility rate in EU in 2019 (births per woman)",
+    title = "Fertility rate in EU in 2020 (births per woman)",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)",
     x = "EU Country",
     y = "Fertility rate") +
@@ -176,57 +180,63 @@ EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, 
 
 ### Mean age of women at birth of first child - preparing df
 MeanAgeWom <- select(AgeWom, indic_de:OBS_VALUE) 
-MeanAgeWom2019 <- filter(MeanAgeWom, 
-                     indic_de=="AGEMOTH1",
-                     TIME_PERIOD==2019)
+MeanAgeWom2020 <- filter(MeanAgeWom, 
+                     indic_de=="AGEMOTH",
+                     TIME_PERIOD==2020)
 # Mean age of women at birth of first child - replacing country code
-MeanAgeWom2019[MeanAgeWom2019 == "BE"] <- "BEL"
-MeanAgeWom2019[MeanAgeWom2019 == "BG"] <- "BGR"
-MeanAgeWom2019[MeanAgeWom2019 == "CZ"] <- "CZE"
-MeanAgeWom2019[MeanAgeWom2019 == "DK"] <- "DNK"
-MeanAgeWom2019[MeanAgeWom2019 == "DE"] <- "DEU"
-MeanAgeWom2019[MeanAgeWom2019 == "EE"] <- "EST"
-MeanAgeWom2019[MeanAgeWom2019 == "EL"] <- "GRC"
-MeanAgeWom2019[MeanAgeWom2019 == "ES"] <- "ESP"
-MeanAgeWom2019[MeanAgeWom2019 == "FR"] <- "FRA"
-MeanAgeWom2019[MeanAgeWom2019 == "HR"] <- "HRV"
-MeanAgeWom2019[MeanAgeWom2019 == "IT"] <- "ITA"
-MeanAgeWom2019[MeanAgeWom2019 == "CY"] <- "CYP"
-MeanAgeWom2019[MeanAgeWom2019 == "LV"] <- "LVA"
-MeanAgeWom2019[MeanAgeWom2019 == "LT"] <- "LTU"
-MeanAgeWom2019[MeanAgeWom2019 == "LU"] <- "LUX"
-MeanAgeWom2019[MeanAgeWom2019 == "HU"] <- "HUN"
-MeanAgeWom2019[MeanAgeWom2019 == "MT"] <- "MLT"
-MeanAgeWom2019[MeanAgeWom2019 == "NL"] <- "NLD"
-MeanAgeWom2019[MeanAgeWom2019 == "AT"] <- "AUT"
-MeanAgeWom2019[MeanAgeWom2019 == "PL"] <- "POL"
-MeanAgeWom2019[MeanAgeWom2019 == "PT"] <- "PRT"
-MeanAgeWom2019[MeanAgeWom2019 == "RO"] <- "ROU"
-MeanAgeWom2019[MeanAgeWom2019 == "SI"] <- "SVN"
-MeanAgeWom2019[MeanAgeWom2019 == "SK"] <- "SVK"
-MeanAgeWom2019[MeanAgeWom2019 == "FI"] <- "FIN"
-MeanAgeWom2019[MeanAgeWom2019 == "SE"] <- "SWE"
-MeanAgeWom2019[MeanAgeWom2019 == "IE"] <- "IRL"
+MeanAgeWom2020[MeanAgeWom2020 == "BE"] <- "BEL"
+MeanAgeWom2020[MeanAgeWom2020 == "BG"] <- "BGR"
+MeanAgeWom2020[MeanAgeWom2020 == "CZ"] <- "CZE"
+MeanAgeWom2020[MeanAgeWom2020 == "DK"] <- "DNK"
+MeanAgeWom2020[MeanAgeWom2020 == "DE"] <- "DEU"
+MeanAgeWom2020[MeanAgeWom2020 == "EE"] <- "EST"
+MeanAgeWom2020[MeanAgeWom2020 == "EL"] <- "GRC"
+MeanAgeWom2020[MeanAgeWom2020 == "ES"] <- "ESP"
+MeanAgeWom2020[MeanAgeWom2020 == "FR"] <- "FRA"
+MeanAgeWom2020[MeanAgeWom2020 == "HR"] <- "HRV"
+MeanAgeWom2020[MeanAgeWom2020 == "IT"] <- "ITA"
+MeanAgeWom2020[MeanAgeWom2020 == "CY"] <- "CYP"
+MeanAgeWom2020[MeanAgeWom2020 == "LV"] <- "LVA"
+MeanAgeWom2020[MeanAgeWom2020 == "LT"] <- "LTU"
+MeanAgeWom2020[MeanAgeWom2020 == "LU"] <- "LUX"
+MeanAgeWom2020[MeanAgeWom2020 == "HU"] <- "HUN"
+MeanAgeWom2020[MeanAgeWom2020 == "MT"] <- "MLT"
+MeanAgeWom2020[MeanAgeWom2020 == "NL"] <- "NLD"
+MeanAgeWom2020[MeanAgeWom2020 == "AT"] <- "AUT"
+MeanAgeWom2020[MeanAgeWom2020 == "PL"] <- "POL"
+MeanAgeWom2020[MeanAgeWom2020 == "PT"] <- "PRT"
+MeanAgeWom2020[MeanAgeWom2020 == "RO"] <- "ROU"
+MeanAgeWom2020[MeanAgeWom2020 == "SI"] <- "SVN"
+MeanAgeWom2020[MeanAgeWom2020 == "SK"] <- "SVK"
+MeanAgeWom2020[MeanAgeWom2020 == "FI"] <- "FIN"
+MeanAgeWom2020[MeanAgeWom2020 == "SE"] <- "SWE"
+MeanAgeWom2020[MeanAgeWom2020 == "IE"] <- "IRL"
 
 # Mean age of women at birth of first child - removing other countries and some other records
-MeanAgeWom2019 <- MeanAgeWom2019[-c(1, 2, 4, 7, 12, 13, 17, 20, 24, 29, 32, 36, 40:42), ]
-
+MeanAgeWom2020 <- MeanAgeWom2020[-c(1, 5, 10, 11, 15, 21, 23, 27, 28, 31, 35, 39), ]
+                                 
 # Mean age of women at birth of first child - renaming column's name
-MeanAgeWom2019 <- MeanAgeWom2019 %>% rename(Country.Code = geo)
+MeanAgeWom2020 <- MeanAgeWom2020 %>% rename(Country.Code = geo)
+
+# Removing column
+MeanAgeWom2020$TIME_PERIOD <- NULL
+
+# Renaming column
+MeanAgeWom2020 <- MeanAgeWom2020 %>% rename(Mean_Age = OBS_VALUE)
 
 # Mean age of women at birth of first child - joining df's
-comb_data_agewom_fr <- left_join(EU_FertRateTot, MeanAgeWom2019, by = "Country.Code")
+comb_data_agewom_fr <- left_join(EU_FertRateTot, MeanAgeWom2020, by = "Country.Code")
 
 # Mean age of women at birth of first child & fertility rate - correlation
-cor(comb_data_agewom_fr$X2019, comb_data_agewom_fr$OBS_VALUE, use = "complete.obs")
+cor(comb_data_agewom_fr$X2020, comb_data_agewom_fr$Mean_Age, use = "complete.obs")
 
 # Mean age of women at birth of first child & fertility rate - chart
 ggFR <- ggplot(data = comb_data_agewom_fr) +
-  geom_text(mapping = aes(x = X2019, y = OBS_VALUE, label = Country.Code)) +
+  geom_text(mapping = aes(x = X2020, y = OBS_VALUE, label = Country.Code)) +
   theme_light() +
   labs(
     title = "Fertility rate & mean age of woman at birth of first child",
-    subtitle = "in EU countries in 2019",
+    subtitle = "in EU countries in 2020",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN
     https://ec.europa.eu/eurostat/databrowser/view/TPS00017/default/table?lang=en&category=demo.demo_fer)",
     x = "Fertility rate",
@@ -258,19 +268,18 @@ PrevContrMeth <- data.frame(Country.Code, AnyMethod)
 comb_data_agewom_fr_contr <- left_join(comb_data_agewom_fr, PrevContrMeth, by = "Country.Code")
 
 # Fertility rate & contraceptive methods(prevalence) - correlation
-cor(comb_data_agewom_fr_contr$X2019, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
+cor(comb_data_agewom_fr_contr$X2020, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
 
 # Mean age of women at birth of first child & contraceptive methods(prevalence) - correlation
-cor(comb_data_agewom_fr_contr$OBS_VALUE, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
+cor(comb_data_agewom_fr_contr$Mean_Age, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
 
 # Chart: Mean age of women at birth of first child & contraceptive methods
 ggCM <- ggplot(data = comb_data_agewom_fr_contr) +
-  geom_point(mapping = aes(x = OBS_VALUE, y = AnyMethod, 
-                           color = Country.Code, size = X2019)) +
+  geom_point(mapping = aes(x = Mean_Age, y = AnyMethod, 
+                           color = Country.Code, size = X2020)) +
   theme_light() +
   labs(
-    title = "Contraceptive methods - prevalence \n& mean age of woman at birth of first child",
-    subtitle = "in 2019 in EU Countries",
+    title = "Contraceptive methods - prevalence in 2019 \n& mean age of woman at birth of first child in 2020 in EU Countries",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN
     https://ec.europa.eu/eurostat/databrowser/view/TPS00017/default/table?lang=en&category=demo.demo_fer
     https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/files/documents/2020/Jan/un_2019_contraceptiveusebymethod_databooklet.pdf)",
@@ -279,7 +288,7 @@ ggCM <- ggplot(data = comb_data_agewom_fr_contr) +
     col = "EU Country",
     size = "Fertility Rate") +
   theme(
-    plot.title = element_text(color="royalblue4", size=14, face="bold", hjust = 0.5),
+    plot.title = element_text(color="royalblue4", size=12, face="bold", hjust = 0.5),
     plot.subtitle = element_text(color="slateblue", size=8, face="italic"),
     plot.caption = element_text(color="deeppink", size=7),
     plot.caption.position = "plot",
@@ -300,18 +309,18 @@ cust_color <- col2rgb(c(palette = 1:3))
 
 plt <- plot_ly(
   data = comb_data_agewom_fr_contr,
-  x = ~OBS_VALUE,
+  x = ~Mean_Age,
   y = ~AnyMethod,
   type = "scatter",
   mode = "markers",
   color = ~Country.Code, 
-  size = ~X2019,
+  size = ~X2020,
   colors = rgb(0:255,0, 100:200, 255, maxColorValue = 255),
   hoverinfo = "text",
-  text = ~paste("</br> Mean Age: ", OBS_VALUE,
+  text = ~paste("</br> Mean Age: ", Mean_Age,
                 "</br> Contr Meth (%): ", AnyMethod,
                 "</br> Country: ", Country.Code,
-                "</br> Fertility Rate: ", X2019)) %>%
+                "</br> Fertility Rate: ", X2020)) %>%
   layout(
     title = "Contraceptive methods - prevalence \n & mean age of woman at birth of first child",
     titlefont = list(
@@ -325,35 +334,84 @@ plt <- plot_ly(
        
 plt
 
-#adds data: GDP 2019
+#adds data: GDP 2020 - non actual
 #data source: https://ec.europa.eu/eurostat/databrowser/view/sdg_08_10/default/table
 
-GDP_per_cap <- c(36080, 6630, 18460, 49270, 35980, 15510, 17760, 25200, 33320, 12700, 27230, 25370,
-                 12530, 14050, 85030, 13270, 22660, 41980, 38110, 13020, 18670, 9120, 20720, 15890,
-                 37150, 44180, 60130)
-Country.Code <- c("BEL", "BGR", "CZE", "DNK", "DEU", "EST", "GRC", "ESP", "FRA", "HRV", "ITA",
-                  "CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
-                  "SVN", "SVK", "FIN", "SWE", "IRL")
+#GDP_per_cap <- c(36080, 6630, 18460, 49270, 35980, 15510, 17760, 25200, 33320, 12700, 27230, 25370,
+                 #12530, 14050, 85030, 13270, 22660, 41980, 38110, 13020, 18670, 9120, 20720, 15890,
+                 #37150, 44180, 60130)
+#Country.Code <- c("BEL", "BGR", "CZE", "DNK", "DEU", "EST", "GRC", "ESP", "FRA", "HRV", "ITA",
+                  #"CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
+                  #"SVN", "SVK", "FIN", "SWE", "IRL")
 
-GDP_EU_2019 <- data.frame(Country.Code, GDP_per_cap)      
+#GDP_EU_2019 <- data.frame(Country.Code, GDP_per_cap)      
 
 #joins data
-comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_2019, by = "Country.Code")
+#comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_2019, by = "Country.Code")
+
+
+### GDP in 2020 - preparing df
+GDP_EU <- select(GDP_EU, geo, TIME_PERIOD, OBS_VALUE) 
+GDP_EU_2020 <- filter(GDP_EU,TIME_PERIOD==2020)
+
+# GDP - replacing country code
+GDP_EU_2020[GDP_EU_2020 == "BE"] <- "BEL"
+GDP_EU_2020[GDP_EU_2020 == "BG"] <- "BGR"
+GDP_EU_2020[GDP_EU_2020 == "CZ"] <- "CZE"
+GDP_EU_2020[GDP_EU_2020 == "DK"] <- "DNK"
+GDP_EU_2020[GDP_EU_2020 == "DE"] <- "DEU"
+GDP_EU_2020[GDP_EU_2020 == "EE"] <- "EST"
+GDP_EU_2020[GDP_EU_2020 == "EL"] <- "GRC"
+GDP_EU_2020[GDP_EU_2020 == "ES"] <- "ESP"
+GDP_EU_2020[GDP_EU_2020 == "FR"] <- "FRA"
+GDP_EU_2020[GDP_EU_2020 == "HR"] <- "HRV"
+GDP_EU_2020[GDP_EU_2020 == "IT"] <- "ITA"
+GDP_EU_2020[GDP_EU_2020 == "CY"] <- "CYP"
+GDP_EU_2020[GDP_EU_2020 == "LV"] <- "LVA"
+GDP_EU_2020[GDP_EU_2020 == "LT"] <- "LTU"
+GDP_EU_2020[GDP_EU_2020 == "LU"] <- "LUX"
+GDP_EU_2020[GDP_EU_2020 == "HU"] <- "HUN"
+GDP_EU_2020[GDP_EU_2020 == "MT"] <- "MLT"
+GDP_EU_2020[GDP_EU_2020 == "NL"] <- "NLD"
+GDP_EU_2020[GDP_EU_2020 == "AT"] <- "AUT"
+GDP_EU_2020[GDP_EU_2020 == "PL"] <- "POL"
+GDP_EU_2020[GDP_EU_2020 == "PT"] <- "PRT"
+GDP_EU_2020[GDP_EU_2020 == "RO"] <- "ROU"
+GDP_EU_2020[GDP_EU_2020 == "SI"] <- "SVN"
+GDP_EU_2020[GDP_EU_2020 == "SK"] <- "SVK"
+GDP_EU_2020[GDP_EU_2020 == "FI"] <- "FIN"
+GDP_EU_2020[GDP_EU_2020 == "SE"] <- "SWE"
+GDP_EU_2020[GDP_EU_2020 == "IE"] <- "IRL"
+
+# GDP- removing other countries and some other records
+GDP_EU_2020 <- GDP_EU_2020[-c(1, 5, 10, 14, 20, 25, 28, 36), ]
+
+# GDP- renaming column's name
+GDP_EU_2020 <- GDP_EU_2020 %>% rename(Country.Code = geo)
+
+#GDP - removing column
+GDP_EU_2020$TIME_PERIOD <- NULL
+
+#GDP - renaming column's name
+GDP_EU_2020 <- GDP_EU_2020 %>% rename(GDP_per_cap2020 = OBS_VALUE)
+
+# GDP - joining df's
+comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_2020, by = "Country.Code")
 
 #correlation: FR and GDP
-cor(comb_data_agewom_fr_contr_gdp$X2019,comb_data_agewom_fr_contr_gdp$GDP_per_cap)
-round(sd(comb_data_agewom_fr_contr_gdp$X2019), 2)
+cor(comb_data_agewom_fr_contr_gdp$X2020,comb_data_agewom_fr_contr_gdp$GDP_per_cap2020)
+round(sd(comb_data_agewom_fr_contr_gdp$X2020), 2)
    
 #correlation: Mean age at the birth of first child and GDP
-cor(comb_data_agewom_fr_contr_gdp$OBS_VALUE,comb_data_agewom_fr_contr_gdp$GDP_per_cap)
+cor(comb_data_agewom_fr_contr_gdp$Mean_Age,comb_data_agewom_fr_contr_gdp$GDP_per_cap2020)
 round(sd(comb_data_agewom_fr_contr_gdp$GDP_per_cap), 2)
 
 #correlation: Prevalence of contraceptive methods and GDP
-cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap, use = "complete.obs") 
+cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, use = "complete.obs") 
 
 #ggpairs
 ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp, 
-        columns = c("OBS_VALUE", "AnyMethod", "GDP_per_cap"),
+        columns = c("Mean_Age", "AnyMethod", "GDP_per_cap2020"),
         title = "Correlations",
         columnLabels = c("Mean age", "Contracept prev", "GDP per cap"),
         upper = list(continuous = wrap("cor", size = 2.5)),
@@ -688,26 +746,29 @@ Country.Code <- c("BEL", "BGR", "CZE", "DNK", "DEU", "EST", "GRC", "ESP", "FRA",
                   "CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
                   "SVN", "SVK", "FIN", "SWE", "IRL")
 
-Depr_GDP_EU_2019 <- data.frame(Country.Code, Depr_sympt, GDP_per_cap)  
+DEPR_EU <- data.frame(Country.Code, Depr_sympt)
 
-#new data frame with depressive symptoms and GDP_per_capita
-EU_LifeExpect_depr_GDP <- left_join(EU_LifeExpect, Depr_GDP_EU_2019, by = "Country.Code")
+#new data frame with depressive symptoms and life expectancy
+EU_LifeExpect_depr <- left_join(EU_LifeExpect, DEPR_EU, comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, by = "Country.Code")
 
-#correlation: Life expectancy and depressive symptoms
-cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$Depr_sympt, use = "complete.obs") 
+#correlation: GDP and depressive symptoms
+cor(comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, EU_LifeExpect_depr$Depr_sympt, use = "complete.obs") 
 
 #correlation: Life expectancy and GDP
-cor(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs") 
+cor(EU_LifeExpect_depr$X2020, comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, use = "complete.obs") 
 
 
 #other method   
-test <- cor.test(EU_LifeExpect_depr_GDP$X2019, EU_LifeExpect_depr_GDP$GDP_per_cap, use = "complete.obs")
+test <- cor.test(EU_LifeExpect_depr$X2020, comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, use = "complete.obs")
 test
+
+#joins column with GDP value to EU_LifeExpect_depr 
+EU_LE_DEPR_GDP <- cbind(EU_LifeExpect_depr, GDP_per_cap2020 = comb_data_agewom_fr_contr_gdp$GDP_per_cap2020)
 
 
 #ggpairs
-ggpLE <- ggpairs(EU_LifeExpect_depr_GDP, 
-              columns = c("X2019", "Depr_sympt", "GDP_per_cap"),
+ggpLE <- ggpairs(EU_LE_DEPR_GDP, 
+              columns = c("X2020", "Depr_sympt", "GDP_per_cap2020"),
               title = "Correlations",
               columnLabels = c("Life expect", "Depression sympt", "GDP per cap"),
               upper = list(continuous = wrap("cor", size = 2.5)),
