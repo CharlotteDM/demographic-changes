@@ -707,6 +707,25 @@ EU_BR_LF <- cbind(EU_BirthRate, LF2020 = EU_LaborFem$LF2020)
 cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
 
 
+#chart
+plot_LF <- ggplot(data = EU_BR_LF) + 
+  geom_col(aes(x = reorder(Country.Name, LF2020), y = LF2020, fill = LF2020)) + 
+  scale_fill_gradient(low="blue", high="red") +
+  coord_flip() +
+  theme_light() +
+  labs(
+    title = "Labor Force in female group",
+    subtitle = "in 2020 in EU",
+    caption = "(based on data from: https://data.worldbank.org/indicator/SL.TLF.TOTL.FE.ZS)",
+    x = "EU Country",
+    y = "Labor Force, fem (%)") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
+    axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
+    legend.position = "none") 
+
+
 
 ### Life Expectation
 #The Highest Life Expectation in the World in 2020
