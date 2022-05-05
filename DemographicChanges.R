@@ -703,9 +703,14 @@ EU_LaborFem <- EU_LaborFem %>% rename(LF2020 = X2020)
 #joins column with Labor Force in 2020 value to EU_BirthRate 
 EU_BR_LF <- cbind(EU_BirthRate, LF2020 = EU_LaborFem$LF2020)
 
-#correlation: BR & LF in EU
+#correlation: BR & LF in EU over the 30 years
 cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
-
+cor(EU_BirthRate$X2015, EU_LaborFem$X2015, use = "complete.obs") 
+cor(EU_BirthRate$X2010, EU_LaborFem$X2010, use = "complete.obs") 
+cor(EU_BirthRate$X2005, EU_LaborFem$X2005, use = "complete.obs") 
+cor(EU_BirthRate$X2000, EU_LaborFem$X2000, use = "complete.obs") 
+cor(EU_BirthRate$X1995, EU_LaborFem$X1995, use = "complete.obs") 
+cor(EU_BirthRate$X1990, EU_LaborFem$X1990, use = "complete.obs") 
 
 #chart
 plot_LF <- ggplot(data = EU_BR_LF) + 
