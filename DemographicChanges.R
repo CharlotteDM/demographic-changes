@@ -538,7 +538,8 @@ ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
   geom_point() +
   ggtitle("Death rate in Poland since 1960 to 2020") +
   xlab("Year") +
-  ylab("Death rate") +
+  ylab("Death Rate") +
+  labs(color = "Death Rate in Poland") +
   transition_reveal(year_dr_pl)
 
 
