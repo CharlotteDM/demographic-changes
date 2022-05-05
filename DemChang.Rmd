@@ -89,7 +89,7 @@ Correlation between fertility rate and mean age of woman at birth of first child
 __```r cor(comb_data_agewom_fr$X2020, comb_data_agewom_fr$Mean_Age, use = "complete.obs")```__
 The higher the age of birth of first child, the lower the fertility rate.
 
-This chart shows fertility rate and mean age of woman at birth of first child (in EU countries in 2019).
+This chart shows fertility rate and mean age of woman at birth of first child (in EU countries in 2020).
 
 ```{r ggFR=plot, dev='png', out.width="150%", echo = FALSE}
 plot(ggFR)
@@ -111,7 +111,7 @@ ggplotly(plt)
 ```
 
 
-Another correlates of fertility rate could be GCP per capita, which is:
+Another correlates of fertility rate could be GDP per capita, which is:
 
 > "The indicator is calculated as the ratio of real GDP to the average population of a specific year. GDP measures the value of total final output of goods and services produced by an economy within a certain period of time. It includes goods and services that have markets (or which could have markets) and products which are produced by general government and non-profit institutions. It is a measure of economic activity and is also used as a proxy for the development in a country’s material living standards. However, it is a limited measure of economic welfare. For example, neither does GDP include most unpaid household work nor does GDP take account of negative effects of economic activity, like environmental degradation".
 
@@ -145,41 +145,41 @@ Birth Rate (crude, per 1000 people) is:
 
 (data & definition source: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)
 
-The country with the highest birth rate in 2019 is 
+The country with the highest birth rate in 2020 is 
 __`r HighBirthRat$Country.Name`__. The birth rate is 
 __`r HighBirthRat$hbr`__.
 
-The country with the lowest birth rate in 2019 is 
+The country with the lowest birth rate in 2020 is 
 __`r LowBirthRat$Country.Name`__. The birth rate is 
 __`r LowBirthRat$lbr`__.
 
-This is the list of countries with the highest birth rate (ordered by highest to lowest). Table shows birth rate difference declining from 1960 to 2019.
+This is the list of countries with the highest birth rate (ordered by highest to lowest). Table shows birth rate difference declining from 1960 to 2020.
 
 ```{r top_10_hbr, echo=FALSE}
-kable(top_10_hbr, col.names = c("Country", "Birth Rate drop since 1960 to 2019"))
+kable(top_10_hbr, col.names = c("Country", "Birth Rate drop since 1960 to 2020"))
 ```
 
-This map shows birth rate in 2019. 
+This map shows birth rate in 2020. 
 
 ```{r , echo=FALSE, out.width="150%"}
 mapCountryData(
   comb_data_map_br,
-  mapTitle = "Birth Rate in 2019",
-  nameColumnToPlot = "X2019",
+  mapTitle = "Birth Rate in 2020",
+  nameColumnToPlot = "X2020-",
   colourPalette = brewer.pal(7, "Greens"),
   borderCol = "black"
 )
 ```
 
-This chart shows birth rate in the whole world in 2019 divided into continents.
+This chart shows birth rate in the whole world in 2020 divided into continents.
 ``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
 BR_cont
 ```
 
-The highest birth rate in 2019 is observed on the African continent, and the lowest - in Europe. This is also confirmed by the calculations.
+The highest birth rate in 2020 is observed on the African continent, and the lowest - in Europe. This is also confirmed by the calculations.
 
 ```{r calcBR, echo=FALSE}
-kable(calcBR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Birth rate in 2019 - selected statistics")
+kable(calcBR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Birth rate in 2020 - selected statistics")
 ```
 
 ***

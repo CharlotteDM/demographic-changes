@@ -16,8 +16,9 @@ library("GGally")
 #install.packages("ggstatsplot")
 #library("ggstatsplot")
 
-BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/birthRateCrudo.csv", 
-                      stringsAsFactors = F)
+BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/BirthRate_update.csv", 
+                      stringsAsFactors = F,
+                      skip = 4)
 DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/DeathRate_update.csv",
                       stringsAsFactors = F,
                       skip = 4)
@@ -600,31 +601,28 @@ ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
   transition_reveal(year_dr_pl)
 
 
-
-
-
-##Birth Rate
-#The Highest Birth Rate in the World in 2019
+### Birth Rate
+#The Highest Birth Rate in the World in 2020
 HighBirthRat <- BirthRate %>%
-  filter(X2019 == max(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(hbr = round(X2019,2))
+  filter(X2020 == max(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(hbr = round(X2020,2))
 
-#The Lowest Birth Rate in the World in 2019
+#The Lowest Birth Rate in the World in 2020
 LowBirthRat <- BirthRate %>%
-  filter(X2019 == min(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(lbr = round(X2019,2))
+  filter(X2020 == min(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(lbr = round(X2020,2))
 
-#The Top 10 Countries with The Highest Birth Rate and BR difference declining from 1960 to 2019
+#The Top 10 Countries with The Highest Birth Rate and BR difference declining from 1960 to 2020
 top_10_hbr <- BirthRate %>%
-  mutate(gain = X2019 - X1960) %>%
+  mutate(gain = X2020 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
   mutate(gain_str = paste(format(round(gain, 2)), "crude (per 1000 people)")) %>%
   dplyr::select(Country.Name, gain_str)
 
-#world map & the Birth Rate in 2019 
+#world map & the Birth Rate in 2020 
 comb_data_map_br <- joinCountryData2Map(
   BirthRate,
   joinCode = "ISO3",
@@ -632,24 +630,21 @@ comb_data_map_br <- joinCountryData2Map(
   mapResolution = "high"
 )
 
-#correlation: FR and BR in the whole world
-
-cor(FertRateTot$X2019, BirthRate$X2019, use = "complete.obs")
-
-
-#Small Multiples: BR & continents in 2019
+#correlation: FR and BR in the whole world in 2020
+cor(FertRateTot$X2020, BirthRate$X2020, use = "complete.obs")
 
 
-BirthRate <- left_join(BirthRate, continents, by = "Country.Code" )
+#Small Multiples: BR & continents in 2020
+BirthRate <- left_join(BirthRate, continents, by = "Country.Code")
                                       
                                       
 BR_cont <- ggplot(data = BirthRate) +
-  geom_point(mapping = aes(x = Country.Code, y = X2019), color = "green") +
+  geom_point(mapping = aes(x = Country.Code, y = X2020), color = "green") +
   facet_wrap(~ Continent_Name,nrow = 1, scales = "free_x") +
   theme(axis.ticks.x = element_blank(),
         axis.text.x = element_blank()) +
   labs(
-    title = "Birth rate in the world in 2019",
+    title = "Birth rate in the world in 2020",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CBRT.IN)",
     x = "Country",
     y = "Birth rate") +
@@ -666,9 +661,9 @@ BR_cont
 
 calcBR <- as.data.frame(BirthRate %>%
   group_by(Continent_Name) %>%
-  dplyr::summarise((AvgBR = round(mean(X2019, na.rm = T), 2)),
-                   (MedBR = round(median(X2019, na.rm = T), 2)),
-                   (SDBR = round(sd(X2019, na.rm = T), 2))))
+  dplyr::summarise((AvgBR = round(mean(X2020, na.rm = T), 2)),
+                   (MedBR = round(median(X2020, na.rm = T), 2)),
+                   (SDBR = round(sd(X2020, na.rm = T), 2))))
 
 
 ##Life Expectation
