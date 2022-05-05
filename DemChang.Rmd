@@ -269,14 +269,21 @@ Reasons for increasing the death rate (in EU in 2017) are:
 
 (source: https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Causes_of_death_statistics#Major_causes_of_death_in_the_EU_in_2017)
 
-Animation shows death rate in one of the EU country - Poland since 1960 to 2019:
+Animation shows death rate in one of the EU country - Poland since 1960 to 2020:
 
 ``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
 ggPL_DR
 ```
 
-As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator
-(_More information in my next project_).
+As we can see death rate in Poland increases since 1960. Moreover, the current pandemic situation is likely to have a significant impact on the above indicator.
+
+The COVID-19 pandemic has affected death rate in EU countries, as the animation below shows:
+
+``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
+animate(ggeu_mr, 
+        duration = 30)
+
+```
 
 ***
 

@@ -1,10 +1,10 @@
 library("dplyr")
 library("tidyverse")
 library("ggplot2")
-library(gganimate)
-library(ggrepel)
+library("gganimate")
+library("ggrepel")
 library("rworldmap")
-library(rgeos)
+library("rgeos")
 library("RColorBrewer")
 library("knitr")
 library("plotly")
@@ -22,8 +22,9 @@ DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/d
                       stringsAsFactors = F)
 FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/fertilityRateTotal.csv",
                         stringsAsFactors = F)
-LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancyTotal.csv",
-                       stringsAsFactors = F)
+LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancy_update.csv",
+                       stringsAsFactors = F,
+                       skip = 4)
 LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/laborFem.csv",
                      stringsAsFactors = F,
                      skip = 4)
@@ -34,6 +35,62 @@ continents <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/
                        stringsAsFactors = F)
 colnames(continents)[5] <- "Country.Code"
 #(data source:https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c#file-country-and-continent-codes-list-csv-csv) )
+
+
+#mortality rate: EU 2020-2022
+EU_MR_20202022 <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/EU_MR20202022.csv",
+                           stringsAsFactors = F)
+
+EU_MR_20202022$geo[EU_MR_20202022$geo == "AT"] <- "AUT"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "BE"] <- "BEL"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "BG"] <- "BGR"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "BG"] <- "BGR"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "CH"] <- "CHE"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "CY"] <- "CYP"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "CZ"] <- "CZE"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "DE"] <- "DEU"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "DK"] <- "DNK"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "EE"] <- "EST"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "EL"] <- "GRC"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "ES"] <- "ESP"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "FI"] <- "FIN"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "FR"] <- "FRA"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "HR"] <- "HRV"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "HU"] <- "HUN"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "IE"] <- "IRL"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "IS"] <- "ISL"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "IT"] <- "ITA"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "LI"] <- "LIE"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "LT"] <- "LTU"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "LU"] <- "LUX"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "LV"] <- "LVA"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "MT"] <- "MLT"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "NL"] <- "NLD"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "NO"] <- "NOR"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "PL"] <- "POL"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "PT"] <- "PRT"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "RO"] <- "ROU"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "SE"] <- "SWE"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "SI"] <- "SVN"
+EU_MR_20202022$geo[EU_MR_20202022$geo == "SK"] <- "SVK"
+
+#filters data from EU
+EUonly_MR_20202022 <- filter (EU_MR_20202022, geo == "POL" | geo == "AUT" |
+                            geo == "BEL" | geo == "BGR" | geo == "HRV" |
+                            geo == "CYP" |
+                            geo == "CZE" | geo == "DNK" | geo == "EST" |
+                            geo == "FIN" | geo == "FRA" | geo == "GRC" |
+                            geo == "ESP" | geo == "NLD" | geo == "IRL" |
+                            geo == "LTU" | geo == "LUX" | geo == "LVA" |
+                            geo == "MLT" | geo == "DEU" | geo == "PRT" |
+                            geo == "ROU" | geo == "SVK" | geo == "SVN" |
+                            geo == "SWE" | geo == "HUN" | 
+                            geo == "ITA")
+
+
+
+
+
 
 
 #The Highest Fertility Rate in the World in 2019
@@ -428,7 +485,36 @@ eu_dr_chart <- ggplot(data = EU_DeathRate) + geom_col(aes(x = reorder(Country.Na
 
 eu_dr_chart
 
-#animations: Death Rate in Pl 
+
+#animation - EU - COVID-19
+#data source:  https://ec.europa.eu/eurostat/databrowser/view/DEMO_MEXRT__custom_1210067/bookmark/table?lang=en&bookmarkId=fc27a3a9-082b-461d-830b-a4c7b36caf4f
+# data source: https://ec.europa.eu/eurostat/web/covid-19/data
+
+
+
+EUonly_MR_20202022$TIME_PERIOD <- as.Date(paste(EUonly_MR_20202022$TIME_PERIOD,"-01",sep="")) 
+class(EUonly_MR_20202022$TIME_PERIOD)
+
+
+ggeu_mr <- ggplot(
+  EUonly_MR_20202022, 
+  aes(x = TIME_PERIOD, y = OBS_VALUE, colour = geo)) +
+  geom_point(show.legend = TRUE, alpha = 0.7) +
+  scale_size(range = c(2, 12)) +
+  labs(x = "Time", 
+       y = "Death Rate",
+       title = "Year: {frame_time}") +
+  shadow_wake(wake_length = 0.2) +
+  shadow_mark(alpha = 0.3, size = 0.5) +
+  transition_time(TIME_PERIOD) 
+
+animate(ggeu_mr, 
+        duration = 30)
+
+
+
+#animations: Death Rate in Pl (1960-2020)
+#data source: https://data.worldbank.org/indicator/SP.DYN.CDRT.IN?locations=PL
 
 year_dr_pl <- c(1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 
                 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 
@@ -436,27 +522,26 @@ year_dr_pl <- c(1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970
                  1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997,
                  1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
                  2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-                 2016, 2017, 2018, 2019)
+                 2016, 2017, 2018, 2019, 2020)
 
 EU_DeathRate[22, ]
 dr_pl <- c(7.6, 7.6, 7.9, 7.5, 7.6, 7.4, 7.4, 7.7, 7.6, 8.1, 8.2, 8.7, 8, 8.4, 8.2, 8.7, 8.9,
            9, 9.4, 9.2, 9.8, 9.2, 9.3, 9.6, 10, 10.3, 10.1, 10.1, 9.9, 10.1, 10.2, 10.6,
            10.3, 10.2, 10, 10, 10, 9.8, 9.7, 9.9, 9.6, 9.5, 9.4, 9.6, 9.5, 9.6, 9.7,
-           9.9, 10, 10.1, 9.9, 9.9, 10.1, 10.2, 9.9, 10.4, 10.2, 10.6, 10.9, 10.8)
+           9.9, 10, 10.1, 9.9, 9.9, 10.1, 10.2, 9.9, 10.4, 10.2, 10.6, 10.9, 10.8, 12.6)
 
 PL_DR <- data.frame(year_dr_pl, dr_pl)
 
 ggPL_DR <- ggplot(data = PL_DR, aes(x=year_dr_pl, y=dr_pl, color=dr_pl)) +
   geom_line() +
   geom_point() +
-  ggtitle("Death rate in Poland") +
+  ggtitle("Death rate in Poland since 1960 to 2020") +
   xlab("Year") +
   ylab("Death rate") +
   transition_reveal(year_dr_pl)
 
 
 
-# causes of death in Poland 2021
 
 
 ##Birth Rate
@@ -496,8 +581,6 @@ cor(FertRateTot$X2019, BirthRate$X2019, use = "complete.obs")
 #Small Multiples: BR & continents in 2019
 
 
-
-
 BirthRate <- left_join(BirthRate, continents, by = "Country.Code" )
                                       
                                       
@@ -530,27 +613,27 @@ calcBR <- as.data.frame(BirthRate %>%
 
 
 ##Life Expectation
-#The Highest Life Expectation in the World in 2019
+#The Highest Life Expectation in the World in 2020
 HighLifeExpect <- LifeExpect %>%
-  filter(X2019 == max(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(hle = round(X2019,2))
+  filter(X2020 == max(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(hle = round(X2020,2))
 
-#The Lowest High Expectation in the World in 2019
+#The Lowest High Expectation in the World in 2020
 LowLifeExpect <- LifeExpect %>%
-  filter(X2019 == min(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(lle = round(X2019,2))
+  filter(X2020 == min(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(lle = round(X2020,2))
 
-#The Top 10 Countries with the Largest Life Expectancy gains since 1960 to 2019
+#The Top 10 Countries with the Largest Life Expectancy gains since 1960 to 2020
 top_10_hleg <- LifeExpect %>%
-  mutate(gain = X2019 - X1960) %>%
+  mutate(gain = X2020 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
   mutate(gain_str = paste(format(round(gain, 2)), "total (years)")) %>%
   dplyr::select(Country.Name, gain_str)
 
-#world map & the Life Expectation in 2019 
+#world map & the Life Expectation in 2020 
 comb_data_map_le <- joinCountryData2Map(
   LifeExpect,
   joinCode = "ISO3",
@@ -575,19 +658,19 @@ EU_LifeExpect <- filter (LifeExpect, Country.Code == "POL" | Country.Code == "AU
                             Country.Code == "SWE" | Country.Code == "HUN" | 
                             Country.Code == "ITA")
 
-#The Highest LE in the EU in 2019
+#The Highest LE in the EU in 2020
 EU_HighLE <- EU_LifeExpect %>%
-  filter(X2019 == max(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_hlifexp = round(X2019,2))
+  filter(X2020 == max(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(eu_hlifexp = round(X2020,2))
 
-#The Lowest Fertility Rate in the World in 2019
+#The Lowest Fertility Rate in the World in 2020
 EU_LowLE <- EU_LifeExpect%>%
-  filter(X2019 == min(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_llifexp = round(X2019,2))
+  filter(X2020 == min(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(eu_llifexp = round(X2020,2))
 
-#map LE in EU countries in 2019
+#map LE in EU countries in 2020
 comb_data_map_eu_le <- joinCountryData2Map(
   EU_LifeExpect,
   joinCode = "ISO3",
