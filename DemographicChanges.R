@@ -18,8 +18,9 @@ library("GGally")
 
 BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/birthRateCrudo.csv", 
                       stringsAsFactors = F)
-DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/death_rateCrudo.csv",
-                      stringsAsFactors = F)
+DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/DeathRate_update.csv",
+                      stringsAsFactors = F,
+                      skip = 4)
 FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/fertilityRateTotal.csv",
                         stringsAsFactors = F)
 LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancy_update.csv",
@@ -369,27 +370,27 @@ DeathRate <- DeathRate[-c(2, 4, 8, 37, 62, 63, 64, 65, 66,
                     182, 184, 192, 199, 205, 216, 218, 219, 231, 232, 
                     237, 239, 242, 242, 250, 260), ]
 
-#The Highest Death Rate in the World in 2019
+#The Highest Death Rate in the World in 2020
 HighDeathRat <- DeathRate %>%
-  filter(X2019 == max(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(hdr = round(X2019,2))
+  filter(X2020 == max(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(hdr = round(X2020,2))
 
-#The Lowest Death Rate in the World in 2019
+#The Lowest Death Rate in the World in 2020
 LowDeathRat <- DeathRate %>%
-  filter(X2019 == min(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(ldr = round(X2019,2))
+  filter(X2020 == min(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(ldr = round(X2020,2))
 
-#The Top 10 Countries with The Highest Death Rate and DR difference declining from 1960 to 2019
+#The Top 10 Countries with The Highest Death Rate and DR difference declining from 1960 to 2020
 top_10_hdr <- DeathRate %>%
-  mutate(gain = X2019 - X1960) %>%
+  mutate(gain = X2020 - X1960) %>%
   top_n(10, wt = gain) %>%
   arrange(-gain) %>%
   mutate(gain_str = paste(format(round(gain, 2)), "crude (per 1000 people)")) %>%
   dplyr::select(Country.Name, gain_str)
 
-#world map & the Death Rate in 2019 
+#world map & the Death Rate in 2020
 comb_data_map_dr <- joinCountryData2Map(
   DeathRate,
   joinCode = "ISO3",
@@ -401,12 +402,12 @@ comb_data_map_dr <- joinCountryData2Map(
 DeathRate_join <- left_join(DeathRate, continents, by = "Country.Code" )
 
 
-#boxplot: Death Rate in 2019
-boxplot_DR <- ggplot (data = DeathRate_join, (aes(Continent_Name,X2019, color=Continent_Name))) +
+#boxplot: Death Rate in 2020
+boxplot_DR <- ggplot (data = DeathRate_join, (aes(Continent_Name,X2020, color=Continent_Name))) +
   geom_boxplot() +
   geom_jitter(width=0.15, alpha=0.3) +
   labs(
-    title = "Death Rate in 2019",
+    title = "Death Rate in 2020",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)",
     x = "Continent",
     y = "Death Rate") +
@@ -425,9 +426,9 @@ boxplot_DR
 
 calcDR <- as.data.frame(DeathRate_join %>%
                           group_by(Continent_Name) %>%
-                          dplyr::summarise((AvgDR = round(mean(X2019, na.rm = T), 2)),
-                                           (MedDR = round(median(X2019, na.rm = T), 2)),
-                                           (SDDR = round(sd(X2019, na.rm = T), 2))))
+                          dplyr::summarise((AvgDR = round(mean(X2020, na.rm = T), 2)),
+                                           (MedDR = round(median(X2020, na.rm = T), 2)),
+                                           (SDDR = round(sd(X2020, na.rm = T), 2))))
 
                    
 
@@ -447,19 +448,19 @@ EU_DeathRate <- filter (DeathRate_join, Country.Code == "POL" | Country.Code == 
 #removes duplicated row - Cyprus
 EU_DeathRate <- EU_DeathRate[-4, ]
 
-#The Highest Death Rate in the EU in 2019
+#The Highest Death Rate in the EU in 2020
 EU_HighDeathRat <- EU_DeathRate %>%
-  filter(X2019 == max(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_hdr = round(X2019,2))
+  filter(X2020 == max(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(eu_hdr = round(X2020,2))
 
-#The Lowest Death Rate in the World in 2019
+#The Lowest Death Rate in the World in 2020
 EU_LowDeathRat <- EU_DeathRate %>%
-  filter(X2019 == min(X2019, na.rm = T)) %>%
-  dplyr::select(Country.Name, X2019) %>%
-  mutate(eu_ldr = round(X2019,2))
+  filter(X2020 == min(X2020, na.rm = T)) %>%
+  dplyr::select(Country.Name, X2020) %>%
+  mutate(eu_ldr = round(X2020,2))
 
-#map FR in EU countries in 2019
+#map DR in EU countries in 2020
 comb_data_map_eu_dr <- joinCountryData2Map(
   EU_DeathRate,
   joinCode = "ISO3",
@@ -467,13 +468,13 @@ comb_data_map_eu_dr <- joinCountryData2Map(
   mapResolution = "high"
 )
 
-#chart: EU countries & Death Rate in 2019 
-eu_dr_chart <- ggplot(data = EU_DeathRate) + geom_col(aes(x = reorder(Country.Name, X2019), y = X2019, fill = X2019)) + 
+#chart: EU countries & Death Rate in 2020
+eu_dr_chart <- ggplot(data = EU_DeathRate) + geom_col(aes(x = reorder(Country.Name, X2020), y = X2020, fill = X2020)) + 
   scale_fill_gradient(low = "darkgreen", high = "darkred") +
   coord_flip() +
   theme_light() +
   labs(
-    title = "Death rate in EU in 2019",
+    title = "Death rate in EU in 2020",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)",
     x = "EU Country",
     y = "Death rate") +

@@ -190,68 +190,68 @@ __Death Rate__ (crude, per 1000 people) indicates:
 
 (data & definition source: https://data.worldbank.org/indicator/SP.DYN.CDRT.IN)
 
-The country with the highest death rate in 2019 is 
+The country with the highest death rate in 2020 is 
 __`r HighDeathRat$Country.Name`__. The death rate is 
 __`r HighDeathRat$hdr`__.
 
-The country with the lowest death rate in 2019 is 
+The country with the lowest death rate in 2020 is 
 __`r LowDeathRat$Country.Name`__. The death rate is 
 __`r LowDeathRat$ldr`__.
 
-This is the list of countries with the highest death rate (ordered by highest to lowest). Table shows death rate difference increasing from 1960 to 2019.
+This is the list of countries with the highest death rate (ordered by highest to lowest). Table shows death rate difference increasing from 1960 to 2020.
 
 ```{r top_10_hdr, echo=FALSE}
-kable(top_10_hdr, col.names = c("Country", "Death Rate increase since 1960 to 2019"))
+kable(top_10_hdr, col.names = c("Country", "Death Rate increase since 1960 to 2020"))
 ```
 
-This map show death rate in 2019. 
+This map show death rate in 2020. 
 
 ```{r , echo=FALSE, out.width="150%"}
 mapCountryData(
   comb_data_map_dr,
-  mapTitle = "Death Rate in 2019",
-  nameColumnToPlot = "X2019",
+  mapTitle = "Death Rate in 2020",
+  nameColumnToPlot = "X2020",
   colourPalette = brewer.pal(7, "Blues"),
   borderCol = "black"
 )
 ```
 
-This boxplot shows death rate in 2019.
+This boxplot shows death rate in 2020.
 
 ```{r boxplot_DR=plot, dev='png', out.width="150%", echo = FALSE, warning=FALSE}
 plot(boxplot_DR)
 ```
 
-The highest death rate in 2019 is observed on the European continent, and the lowest - in Africa This is also confirmed by the calculations.
+The highest death rate in 2020 is observed on the European continent, and the lowest - in Asia. This is also confirmed by the calculations.
 
 ```{r calcDR, echo=FALSE}
-kable(calcDR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Death rate in 2019 - selected statistics")
+kable(calcDR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Death rate in 2020 - selected statistics")
 ```
 
 
-The country with the highest death rate in 2019 in EU is 
+The country with the highest death rate in 2020 in EU is 
 __`r EU_HighDeathRat$Country.Name`__. The death rate is 
 __`r EU_HighDeathRat$eu_hdr`__.
 
-The country with the lowest death rate in 2019 is 
+The country with the lowest death rate in 2020 is 
 __`r EU_LowDeathRat$Country.Name`__. The death rate is 
 __`r EU_LowDeathRat$eu_ldr`__.
 
-This is graphical representation of death rate in 2019.
+This is graphical representation of death rate in 2020.
 
 ```{r , dev='png', out.width="150%", echo = FALSE, warning=FALSE}
 plot(eu_dr_chart)
 ```
 
 
-This map show death rate in 2019 in EU. 
+This map show death rate in 2020 in EU. 
 
 ```{r , echo=FALSE, out.width="150%" }
 mapCountryData(
   comb_data_map_eu_dr,
-  mapTitle = "Death Rate in 2019 in EU",
+  mapTitle = "Death Rate in 2020 in EU",
   mapRegion = "Europe",
-  nameColumnToPlot = "X2019",
+  nameColumnToPlot = "X2020",
   colourPalette = brewer.pal(7, "Blues"),
   borderCol = "black"
 )
@@ -293,27 +293,27 @@ __Life expectancy__ at birth (total, years):
 
 (data & definition source: https://data.worldbank.org/indicator/SP.DYN.LE00.IN)
 
-The country with the highest life expectancy in 2019 is 
+The country with the highest life expectancy in 2020 is 
 __`r HighLifeExpect$Country.Name`__. The life expectancy rate is 
 __`r HighLifeExpect$hle`__.
 
-The country with the lowest life expectancy in 2019 is 
+The country with the lowest life expectancy in 2020 is 
 __`r LowLifeExpect$Country.Name`__. The life expectancy is 
 __`r LowLifeExpect$lle`__.
 
-This is the list of countries with the largest life expectancy gains from 1960 to 2019
+This is the list of countries with the largest life expectancy gains from 1960 to 2020
 
 ```{r top_10_hleg, echo=FALSE}
-kable(top_10_hleg, col.names = c("Country", "The greatest increase since 1960 to 2019 (in years)"))
+kable(top_10_hleg, col.names = c("Country", "The greatest increase since 1960 to 2020 (in years)"))
 ```
 
-This map show life expectancy in 2019 in the whole world. 
+This map show life expectancy in 2020 in the whole world. 
 
 ```{r , echo=FALSE, out.width="150%"  }
 mapCountryData(
   comb_data_map_le,
-  mapTitle = "Life expectancy in 2019",
-  nameColumnToPlot = "X2019",
+  mapTitle = "Life expectancy in 2020",
+  nameColumnToPlot = "X2020",
   colourPalette = brewer.pal(7, "Purples"),
   borderCol = "black"
 )
@@ -330,22 +330,22 @@ The factors which have impact for life expectancy are among others:
 - economic growth, health expenditure, clean water, improved sanitation conditions, carbon emission, access to drinking water (Rahman, Rana & Khanam, 2022)
 
 
-The country of EU with the highest life expectancy in 2019 is 
+The country of EU with the highest life expectancy in 2020 is 
 __`r EU_HighLE$Country.Name`__. The life expectancy is 
 __`r EU_HighLE$eu_hlifexp`__.
 
-The country of EU with the lowest life expectancy in 2019 is 
+The country of EU with the lowest life expectancy in 2020 is 
 __`r EU_LowLE$Country.Name`__. The life expectancy is 
 __`r EU_LowLE$eu_llifexp`__.
 
-This map shows life expectancy in EU countries in 2019. 
+This map shows life expectancy in EU countries in 2020. 
 
 ```{r , echo=FALSE, out.width="150%"}
 mapCountryData(
   comb_data_map_eu_le,
-  mapTitle = "Life Expectancy in 2019 in EU",
+  mapTitle = "Life Expectancy in 2020 in EU",
   mapRegion = "Europe",
-  nameColumnToPlot = "X2019",
+  nameColumnToPlot = "X2020",
   colourPalette = brewer.pal(7, "Purples"),
   borderCol = "black")
 ```
