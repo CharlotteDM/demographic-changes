@@ -28,7 +28,7 @@ FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project
 LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancy_update.csv",
                        stringsAsFactors = F,
                        skip = 4)
-LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/laborFem.csv",
+LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LaborForce_update.csv",
                      stringsAsFactors = F,
                      skip = 4)
 AgeWom <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/Age WomFirstChild_update.csv",
@@ -92,11 +92,6 @@ EUonly_MR_20202022 <- filter (EU_MR_20202022, geo == "POL" | geo == "AUT" |
                             geo == "ROU" | geo == "SVK" | geo == "SVN" |
                             geo == "SWE" | geo == "HUN" | 
                             geo == "ITA")
-
-
-
-
-
 
 
 #The Highest Fertility Rate in the World in 2020
@@ -666,7 +661,25 @@ calcBR <- as.data.frame(BirthRate %>%
                    (SDBR = round(sd(X2020, na.rm = T), 2))))
 
 
-##Life Expectation
+# BR and Labour Force in female group in EU 
+EU_BirthRate<- filter (BirthRate, Country.Code == "POL" | Country.Code == "AUT" |
+                            Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                            Country.Code == "CYP" |
+                            Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                            Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                            Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                            Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                            Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                            Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                            Country.Code == "SWE" | Country.Code == "HUN" | 
+                            Country.Code == "ITA")
+
+#removes duplicated row - Cyprus
+EU_BirthRate <- EU_BirthRate[-4, ]
+
+
+
+### Life Expectation
 #The Highest Life Expectation in the World in 2020
 HighLifeExpect <- LifeExpect %>%
   filter(X2020 == max(X2020, na.rm = T)) %>%

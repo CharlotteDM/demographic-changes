@@ -165,7 +165,7 @@ This map shows birth rate in 2020.
 mapCountryData(
   comb_data_map_br,
   mapTitle = "Birth Rate in 2020",
-  nameColumnToPlot = "X2020-",
+  nameColumnToPlot = "X2020",
   colourPalette = brewer.pal(7, "Greens"),
   borderCol = "black"
 )
