@@ -661,7 +661,13 @@ calcBR <- as.data.frame(BirthRate %>%
                    (SDBR = round(sd(X2020, na.rm = T), 2))))
 
 
-# BR and Labour Force in female group in EU 
+#correlation: BR & LF in the world
+LaborFem <- LaborFem %>% rename(LF2020 = X2020)
+
+cor(BirthRate$X2020, LaborFem$LF2020, use = "complete.obs") 
+
+### BR and Labor Force in female group in EU 
+#EU BR
 EU_BirthRate<- filter (BirthRate, Country.Code == "POL" | Country.Code == "AUT" |
                             Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
                             Country.Code == "CYP" |
@@ -676,6 +682,29 @@ EU_BirthRate<- filter (BirthRate, Country.Code == "POL" | Country.Code == "AUT" 
 
 #removes duplicated row - Cyprus
 EU_BirthRate <- EU_BirthRate[-4, ]
+
+#EU LF
+EU_LaborFem<- filter (LaborFem, Country.Code == "POL" | Country.Code == "AUT" |
+                         Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                         Country.Code == "CYP" |
+                         Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                         Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                         Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                         Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                         Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                         Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                         Country.Code == "SWE" | Country.Code == "HUN" | 
+                         Country.Code == "ITA")
+
+#EU_LF - renaming column's name
+EU_LaborFem <- EU_LaborFem %>% rename(LF2020 = X2020)
+
+
+#joins column with Labor Force in 2020 value to EU_BirthRate 
+EU_BR_LF <- cbind(EU_BirthRate, LF2020 = EU_LaborFem$LF2020)
+
+#correlation: BR & LF in EU
+cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
 
 
 
@@ -709,7 +738,7 @@ comb_data_map_le <- joinCountryData2Map(
 )
 
 
-#Life Expectancy and depressive symptoms
+#Life expectancy and depressive symptoms
 #source of data: https://ec.europa.eu/eurostat/databrowser/view/HLTH_EHIS_MH1E/default/table?lang=en&category=hlth.hlth_state.hlth_sph
 
 #filters data from EU countries
@@ -783,3 +812,10 @@ ggpLE <- ggpairs(EU_LE_DEPR_GDP,
 ggpLE
 
 
+### Others correlations -> results: weak correlations
+cor(FertRateTot$X2020, LaborFem$LF2020, use = "complete.obs") 
+cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")
+cor(EU_FertRateTot$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
+cor(comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, EU_LaborFem$LF2020, use = "complete.obs")
+cor(comb_data_agewom_fr_contr_gdp$Mean_Age,EU_LaborFem$LF2020, use = "complete.obs") 
+cor(comb_data_agewom_fr_contr_gdp$AnyMethod, EU_LaborFem$LF2020, use = "complete.obs") 
