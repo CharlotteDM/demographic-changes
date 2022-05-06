@@ -661,11 +661,6 @@ calcBR <- as.data.frame(BirthRate %>%
                    (SDBR = round(sd(X2020, na.rm = T), 2))))
 
 
-#correlation: BR & LF in the world
-LaborFem <- LaborFem %>% rename(LF2020 = X2020)
-
-cor(BirthRate$X2020, LaborFem$LF2020, use = "complete.obs") 
-
 ### BR and Labor Force in female group in EU 
 #EU BR
 EU_BirthRate<- filter (BirthRate, Country.Code == "POL" | Country.Code == "AUT" |
@@ -712,7 +707,29 @@ cor(EU_BirthRate$X2000, EU_LaborFem$X2000, use = "complete.obs")
 cor(EU_BirthRate$X1995, EU_LaborFem$X1995, use = "complete.obs") 
 cor(EU_BirthRate$X1990, EU_LaborFem$X1990, use = "complete.obs") 
 
-#chart
+#prepares new data frame: renaming and joining
+nEU_BirthRate <- EU_BirthRate %>% rename(BR2020 = X2020)
+nEU_BirthRate <- nEU_BirthRate %>% rename(BR2015 = X2015)
+nEU_BirthRate <- nEU_BirthRate %>% rename(BR2010 = X2010)
+nEU_BirthRate <- nEU_BirthRate %>% rename(BR2005 = X2005)
+nEU_BirthRate <- nEU_BirthRate %>% rename(BR2000 = X2000)
+nEU_BirthRate <- nEU_BirthRate %>% rename(BR1995 = X1995)
+nEU_BirthRate <- nEU_BirthRate %>% rename(BR1990 = X1990)
+#nEU_LaborFem <- EU_LaborFem %>% rename(LF2020 = X2020) #did this above
+nEU_LaborFem <- EU_LaborFem %>% rename(LF2015 = X2015)
+nEU_LaborFem <- nEU_LaborFem %>% rename(LF2010 = X2010)
+nEU_LaborFem <- nEU_LaborFem %>% rename(LF2005 = X2005)
+nEU_LaborFem <- nEU_LaborFem %>% rename(LF2000 = X2000)
+nEU_LaborFem <- nEU_LaborFem %>% rename(LF1995 = X1995)
+nEU_LaborFem <- nEU_LaborFem %>% rename(LF1990 = X1990)
+
+nEU_BR_LF <- left_join(nEU_BirthRate, nEU_LaborFem, by = "Country.Code")
+
+ggpairs(nEU_BR_LF[, c(65, 136, 60, 131, 55, 126, 50, 121,
+                      45, 116, 40, 111, 35, 106)])
+
+
+#chart: LF in EU
 plot_LF <- ggplot(data = EU_BR_LF) + 
   geom_col(aes(x = reorder(Country.Name, LF2020), y = LF2020, fill = LF2020)) + 
   scale_fill_gradient(low="blue", high="red") +
@@ -842,4 +859,8 @@ cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")
 cor(EU_FertRateTot$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
 cor(comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, EU_LaborFem$LF2020, use = "complete.obs")
 cor(comb_data_agewom_fr_contr_gdp$Mean_Age,EU_LaborFem$LF2020, use = "complete.obs") 
-cor(comb_data_agewom_fr_contr_gdp$AnyMethod, EU_LaborFem$LF2020, use = "complete.obs") 
+cor(comb_data_agewom_fr_contr_gdp$AnyMethod, EU_LaborFem$LF2020, use = "complete.obs")
+
+
+
+

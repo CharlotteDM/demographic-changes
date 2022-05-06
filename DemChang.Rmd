@@ -182,6 +182,38 @@ The highest birth rate in 2020 is observed on the African continent, and the low
 kable(calcBR, col.names = c("Continent", "Mean", "Median", "SD"), caption = "Birth rate in 2020 - selected statistics")
 ```
 
+
+The literature emphasizes the relationship between the participation of women in the labor market and the fertility rate (Ahn & Mira, 2002; Engelhardt et all., 2004; Luci-Greulich & Thévenon 2013).
+
+__Femal labor force__ (% of total labor force) indicates: 
+
+>"a percentage of the total show the extent to which women are active in the labor force. Labor force comprises people ages 15 and older who supply labor for the production of goods and services during a specified period".
+
+(definition & data source: https://data.worldbank.org/indicator/SL.TLF.TOTL.FE.ZS).
+
+
+Correlation between __birth rate in 2020__ and __labor force in female group in EU__ is weak: 
+__```r `cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")```__.
+
+The distribution of the labor force in the group of women is as follows:
+
+```{r plot_LF=plot, dev='png', out.width="150%", echo=FALSE}
+plot(plot_LF)
+```
+
+But correlation between labour force and birth rate has changed over the years:
+
+- in 2020: __```r `cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")```__
+- in 2015: __```r `cor(EU_BirthRate$X2015, EU_LaborFem$LF2015, use = "complete.obs")```__
+- in 2010: __```r `cor(EU_BirthRate$X2010, EU_LaborFem$LF2010, use = "complete.obs")```__
+- in 2005: __```r `cor(EU_BirthRate$X2005, EU_LaborFem$LF2005, use = "complete.obs")```__
+- in 2000: __```r `cor(EU_BirthRate$X2000, EU_LaborFem$LF2000, use = "complete.obs")```__
+- in 1995: __```r `cor(EU_BirthRate$X1995, EU_LaborFem$LF1995, use = "complete.obs")```__
+- in 1990: __```r `cor(EU_BirthRate$X1990, EU_LaborFem$LF1990, use = "complete.obs")```__
+
+As we can see, in the years 1995-2005 the correlation was negative, now it is positive. It should be remembered that it is, however, weak.
+Family support policy and spendings on family benefits has also a great impact on birth rate, especially in the Central and Eastern Europe (Beaujouan & Berghammer, 2019). 
+
 ***
 
 __Death Rate__ (crude, per 1000 people) indicates: 
