@@ -625,10 +625,6 @@ comb_data_map_br <- joinCountryData2Map(
   mapResolution = "high"
 )
 
-#correlation: FR and BR in the whole world in 2020
-cor(FertRateTot$X2020, BirthRate$X2020, use = "complete.obs")
-
-
 #Small Multiples: BR & continents in 2020
 BirthRate <- left_join(BirthRate, continents, by = "Country.Code")
                                       
@@ -854,13 +850,38 @@ ggpLE
 
 
 ### Others correlations -> results: weak correlations
-cor(FertRateTot$X2020, LaborFem$LF2020, use = "complete.obs") 
+
 cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")
 cor(EU_FertRateTot$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
 cor(comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, EU_LaborFem$LF2020, use = "complete.obs")
 cor(comb_data_agewom_fr_contr_gdp$Mean_Age,EU_LaborFem$LF2020, use = "complete.obs") 
 cor(comb_data_agewom_fr_contr_gdp$AnyMethod, EU_LaborFem$LF2020, use = "complete.obs")
 
+### Models
+model1 <- lm(X2020 ~ GDP_per_cap2020, data = EU_LE_DEPR_GDP)
+gg_mod1 <- ggplot(data = EU_LE_DEPR_GDP)   +
+  geom_point(mapping = aes(x = GDP_per_cap2020, y = X2020)) +
+  geom_smooth(mapping = aes(x = GDP_per_cap2020, y = X2020)) +
+  labs(title = "GDP per capita and life expectancy", subtitle = "in EU in 2020", 
+       caption = "data source: https://ec.europa.eu/eurostat/databrowser/view/sdg_08_10/default/table,
+       https://data.worldbank.org/indicator/SP.DYN.LE00.IN",
+       x = "GDP", y = "Life Expectancy") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    axis.title.x = element_text(color="royalblue4", size=12, face="bold"),
+    axis.title.y = element_text(color="royalblue4", size=12, face="bold")) 
 
 
-
+model2 <- lm(X2020 ~ Mean_Age, data = comb_data_agewom_fr)
+cor(comb_data_agewom_fr$X2020,comb_data_agewom_fr$Mean_Age, use = "complete.obs" )
+gg_mod2 <- ggplot(data = comb_data_agewom_fr)   +
+  geom_point(mapping = aes(x = Mean_Age, y = X2020)) +
+  geom_smooth(mapping = aes(x = Mean_Age, y = X2020)) +
+  labs(title = "Fertility Rate & Mean Age at Birth First Child", subtitle = "in EU in 2020", 
+       caption = "data source: https://ec.europa.eu/eurostat/databrowser/view/TPS00017/default/table?lang=en&category=demo.demo_fer,
+       https://data.worldbank.org/indicator/SP.DYN.TFRT.IN",
+       x = "Age", y = "Fertility Rate") +
+  theme(
+    plot.title = element_text(color="royalblue4", size=14, face="bold"),
+    axis.title.x = element_text(color="royalblue4", size=12, face="bold"),
+    axis.title.y = element_text(color="royalblue4", size=12, face="bold")) 

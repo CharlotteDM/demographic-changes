@@ -193,7 +193,7 @@ __Femal labor force__ (% of total labor force) indicates:
 
 
 Correlation between __birth rate in 2020__ and __labor force in female group in EU__ is weak: 
-__```r `cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")```__.
+__```r cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")```__.
 
 The distribution of the labor force in the group of women is as follows:
 
@@ -203,13 +203,13 @@ plot(plot_LF)
 
 But correlation between labour force and birth rate has changed over the years:
 
-- in 2020: __```r `cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")```__
-- in 2015: __```r `cor(EU_BirthRate$X2015, EU_LaborFem$LF2015, use = "complete.obs")```__
-- in 2010: __```r `cor(EU_BirthRate$X2010, EU_LaborFem$LF2010, use = "complete.obs")```__
-- in 2005: __```r `cor(EU_BirthRate$X2005, EU_LaborFem$LF2005, use = "complete.obs")```__
-- in 2000: __```r `cor(EU_BirthRate$X2000, EU_LaborFem$LF2000, use = "complete.obs")```__
-- in 1995: __```r `cor(EU_BirthRate$X1995, EU_LaborFem$LF1995, use = "complete.obs")```__
-- in 1990: __```r `cor(EU_BirthRate$X1990, EU_LaborFem$LF1990, use = "complete.obs")```__
+- in 2020: __```r cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")```__
+- in 2015: __```r cor(EU_BirthRate$X2015, EU_LaborFem$LF2015, use = "complete.obs")```__
+- in 2010: __```r cor(EU_BirthRate$X2010, EU_LaborFem$LF2010, use = "complete.obs")```__
+- in 2005: __```r cor(EU_BirthRate$X2005, EU_LaborFem$LF2005, use = "complete.obs")```__
+- in 2000: __```r cor(EU_BirthRate$X2000, EU_LaborFem$LF2000, use = "complete.obs")```__
+- in 1995: __```r cor(EU_BirthRate$X1995, EU_LaborFem$LF1995, use = "complete.obs")```__
+- in 1990: __```r cor(EU_BirthRate$X1990, EU_LaborFem$LF1990, use = "complete.obs")```__
 
 As we can see, in the years 1995-2005 the correlation was negative, now it is positive. It should be remembered that it is, however, weak.
 Family support policy and spendings on family benefits has also a great impact on birth rate, especially in the Central and Eastern Europe (Beaujouan & Berghammer, 2019). 
@@ -398,4 +398,24 @@ __```r cor(EU_LifeExpect_depr$X2020, comb_data_agewom_fr_contr_gdp$GDP_per_cap20
 
 ***
 
-In summary, we see fertility rate and birth rate falling over the years, while death rate and life expectancy are increasing. It is very important to follow dmeographic changes in countries and individual parts of the world so that governments can react early and shape their policies on public health, pro-family policies, etc.It is impossible to track demographic changes in isolation from the data on armed conflicts and the related migration of people, climate change, and the pandemic situation. 
+Finally, I want to present a few interesting relations between the above variables. As it was above, there is an average correlation between the fertility rate and the  age of a woman at birth first child. 
+
+This chart shows some interesting.
+
+``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
+gg_mod2
+```
+
+There is a visible decline in fertility rate when a woman gives birth to her first child at the age of 32.
+
+This is the result of regression model.
+
+``` {r, echo=FALSE, error=FALSE, warning=FALSE}
+model2
+```
+
+Each subsequent year reduces the fertility rate by 0.04.
+
+***
+
+In summary, we see fertility rate and birth rate falling over the years, while death rate and life expectancy are increasing. It is very important to follow demographic changes in countries and individual parts of the world so that governments can react early and shape their policies on public health, pro-family policies, etc.It is impossible to track demographic changes in isolation from the data on armed conflicts and the related migration of people, climate change, and the pandemic situation. 
