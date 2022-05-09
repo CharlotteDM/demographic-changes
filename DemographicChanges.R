@@ -443,6 +443,15 @@ top_10_hdr <- DeathRate %>%
   mutate(gain_str = paste(format(round(gain, 2)), "crude (per 1000 people)")) %>%
   dplyr::select(Country.Name, gain_str)
 
+#The Top 10 Countries with The Highest Death Rate and DR difference declining from 2019 to 2020
+top_10_hdr2020 <- DeathRate %>%
+  mutate(gain = X2020 - X2019) %>%
+  top_n(10, wt = gain) %>%
+  arrange(-gain) %>%
+  mutate(gain_str = paste(format(round(gain, 2)), "crude (per 1000 people)")) %>%
+  dplyr::select(Country.Name, gain_str)
+
+
 #world map & the Death Rate in 2020
 comb_data_map_dr <- joinCountryData2Map(
   DeathRate,
@@ -688,47 +697,31 @@ EU_LaborFem<- filter (LaborFem, Country.Code == "POL" | Country.Code == "AUT" |
                          Country.Code == "ITA")
 
 #EU_LF - renaming column's name
-EU_LaborFem <- EU_LaborFem %>% rename(LF2020 = X2020)
+#rename(EU_LaborFem, X2020 = LF2020)
 
 
 #joins column with Labor Force in 2020 value to EU_BirthRate 
-EU_BR_LF <- cbind(EU_BirthRate, LF2020 = EU_LaborFem$LF2020)
+EU_BR_LF <- cbind(EU_BirthRate, X2020 = EU_LaborFem$X2020)
 
+
+X2020 <- cor(EU_BirthRate$X2020, EU_LaborFem$X2020, use = "complete.obs")
+X2015 <- cor(EU_BirthRate$X2015, EU_LaborFem$X2015, use = "complete.obs")
+X2010 <- cor(EU_BirthRate$X2010, EU_LaborFem$X2010, use = "complete.obs")
+X2005 <- cor(EU_BirthRate$X2005, EU_LaborFem$X2005, use = "complete.obs")
+X2000 <- cor(EU_BirthRate$X2000, EU_LaborFem$X2000, use = "complete.obs")
+X1995 <- cor(EU_BirthRate$X1995, EU_LaborFem$X1995, use = "complete.obs") 
+X1990 <- cor(EU_BirthRate$X1990, EU_LaborFem$X1990, use = "complete.obs")
 #correlation: BR & LF in EU over the 30 years
-cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
-cor(EU_BirthRate$X2015, EU_LaborFem$X2015, use = "complete.obs") 
-cor(EU_BirthRate$X2010, EU_LaborFem$X2010, use = "complete.obs") 
-cor(EU_BirthRate$X2005, EU_LaborFem$X2005, use = "complete.obs") 
-cor(EU_BirthRate$X2000, EU_LaborFem$X2000, use = "complete.obs") 
-cor(EU_BirthRate$X1995, EU_LaborFem$X1995, use = "complete.obs") 
-cor(EU_BirthRate$X1990, EU_LaborFem$X1990, use = "complete.obs") 
+corr_BR_LF <- data.frame(X2020,X2015,X2010,X2005,X2000,X1995,X1990,
+stringsAsFactors = FALSE)
 
-#prepares new data frame: renaming and joining
-nEU_BirthRate <- EU_BirthRate %>% rename(BR2020 = X2020)
-nEU_BirthRate <- nEU_BirthRate %>% rename(BR2015 = X2015)
-nEU_BirthRate <- nEU_BirthRate %>% rename(BR2010 = X2010)
-nEU_BirthRate <- nEU_BirthRate %>% rename(BR2005 = X2005)
-nEU_BirthRate <- nEU_BirthRate %>% rename(BR2000 = X2000)
-nEU_BirthRate <- nEU_BirthRate %>% rename(BR1995 = X1995)
-nEU_BirthRate <- nEU_BirthRate %>% rename(BR1990 = X1990)
-#nEU_LaborFem <- EU_LaborFem %>% rename(LF2020 = X2020) #did this above
-nEU_LaborFem <- EU_LaborFem %>% rename(LF2015 = X2015)
-nEU_LaborFem <- nEU_LaborFem %>% rename(LF2010 = X2010)
-nEU_LaborFem <- nEU_LaborFem %>% rename(LF2005 = X2005)
-nEU_LaborFem <- nEU_LaborFem %>% rename(LF2000 = X2000)
-nEU_LaborFem <- nEU_LaborFem %>% rename(LF1995 = X1995)
-nEU_LaborFem <- nEU_LaborFem %>% rename(LF1990 = X1990)
-
-nEU_BR_LF <- left_join(nEU_BirthRate, nEU_LaborFem, by = "Country.Code")
-
-ggpairs(nEU_BR_LF[, c(65, 136, 60, 131, 55, 126, 50, 121,
-                      45, 116, 40, 111, 35, 106)])
+remove(X2020,X2015,X2010,X2005,X2000,X1995,X1990)
 
 
 #chart: LF in EU
-plot_LF <- ggplot(data = EU_BR_LF) + 
-  geom_col(aes(x = reorder(Country.Name, LF2020), y = LF2020, fill = LF2020)) + 
-  scale_fill_gradient(low="blue", high="red") +
+plot_LF <- ggplot(data = EU_LaborFem) + 
+  geom_col(aes(x = reorder(Country.Name, X2020), y = X2020, fill = X2020)) + 
+  scale_fill_gradient(low="yellow", high="blue") +
   coord_flip() +
   theme_light() +
   labs(
@@ -851,11 +844,11 @@ ggpLE
 
 ### Others correlations -> results: weak correlations
 
-cor(EU_BirthRate$X2020, EU_LaborFem$LF2020, use = "complete.obs")
-cor(EU_FertRateTot$X2020, EU_LaborFem$LF2020, use = "complete.obs") 
-cor(comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, EU_LaborFem$LF2020, use = "complete.obs")
-cor(comb_data_agewom_fr_contr_gdp$Mean_Age,EU_LaborFem$LF2020, use = "complete.obs") 
-cor(comb_data_agewom_fr_contr_gdp$AnyMethod, EU_LaborFem$LF2020, use = "complete.obs")
+cor(EU_BirthRate$X2020, EU_LaborFem$X2020, use = "complete.obs")
+cor(EU_FertRateTot$X2020, EU_LaborFem$X2020, use = "complete.obs") 
+cor(comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, EU_LaborFem$X2020, use = "complete.obs")
+cor(comb_data_agewom_fr_contr_gdp$Mean_Age,EU_LaborFem$X2020, use = "complete.obs") 
+cor(comb_data_agewom_fr_contr_gdp$AnyMethod, EU_LaborFem$X2020, use = "complete.obs")
 
 ### Models
 model1 <- lm(X2020 ~ GDP_per_cap2020, data = EU_LE_DEPR_GDP)
@@ -885,3 +878,6 @@ gg_mod2 <- ggplot(data = comb_data_agewom_fr)   +
     plot.title = element_text(color="royalblue4", size=14, face="bold"),
     axis.title.x = element_text(color="royalblue4", size=12, face="bold"),
     axis.title.y = element_text(color="royalblue4", size=12, face="bold")) 
+
+
+
