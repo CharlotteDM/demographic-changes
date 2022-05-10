@@ -11,37 +11,40 @@ library("plotly")
 library("htmlwidgets")
 library("GGally")
 library("stats")
+library("rstudioapi")
 
+path <- dirname(rstudioapi::getActiveDocumentContext()$path)
+setwd(path)
 
-BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/BirthRate_update.csv", 
+BirthRate <- read.csv("data/BirthRate_update.csv", 
                       stringsAsFactors = F,
                       skip = 4)
-DeathRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/DeathRate_update.csv",
+DeathRate <- read.csv("data/DeathRate_update.csv",
                       stringsAsFactors = F,
                       skip = 4)
-FertRateTot <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/FertilityRate_update.csv",
+FertRateTot <- read.csv("data/FertilityRate_update.csv",
                         stringsAsFactors = F,
                         skip = 4)
-LifeExpect <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LifeExpectancy_update.csv",
+LifeExpect <- read.csv("data/LifeExpectancy_update.csv",
                        stringsAsFactors = F,
                        skip = 4)
-LaborFem <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/LaborForce_update.csv",
+LaborFem <- read.csv("data/LaborForce_update.csv",
                      stringsAsFactors = F,
                      skip = 4)
-AgeWom <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/Age WomFirstChild_update.csv",
+AgeWom <- read.csv("data/Age WomFirstChild_update.csv",
                    stringsAsFactors = F)
 
-GDP_EU <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/GDP_EU_update.csv",
+GDP_EU <- read.csv("data/GDP_EU_update.csv",
                         stringsAsFactors = F)
 
-continents <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/continents.csv",
+continents <- read.csv("data/continents.csv",
                        stringsAsFactors = F)
 colnames(continents)[5] <- "Country.Code"
 #(data source:https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c#file-country-and-continent-codes-list-csv-csv) )
 
 
 # mortality rate: EU 2020-2022
-EU_MR_20202022 <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/EU_MR20202022.csv",
+EU_MR_20202022 <- read.csv("data/EU_MR20202022.csv",
                            stringsAsFactors = F)
 
 EU_MR_20202022$geo[EU_MR_20202022$geo == "AT"] <- "AUT"
