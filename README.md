@@ -1,1 +1,1 @@
-Generated HTML file - [Link text Here](https://link-url-here.org)
+Generated HTML file preview - [https://charlottedm.github.io/demographic-changes/](https://charlottedm.github.io/demographic-changes/)
