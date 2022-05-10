@@ -1,9 +1,7 @@
 ---
 title: "Demographic Changes"
 author: "Karolina DM"
-output: 
-  html_document:
-    keep_md: true
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -111,6 +109,7 @@ This interactive graph shows the distribution of the variables: the fertility ra
 ```{r plt=ggplotly, out.width="110%", echo=FALSE, error=FALSE, warning=FALSE}
 ggplotly(plt)
 ```
+
 
 
 Another correlates of fertility rate could be GDP per capita, which is:
