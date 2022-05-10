@@ -10,6 +10,7 @@ output:
 library("knitr")
 library("tidyverse")
 library("plotly")
+library("htmlwidgets")
 source("DemographicChanges.R")
 ```
 
