@@ -10,11 +10,8 @@ library("knitr")
 library("plotly")
 library("htmlwidgets")
 library("GGally")
+library("stats")
 
-#install.packages("Hmisc")
-#library("Hmisc")
-#install.packages("ggstatsplot")
-#library("ggstatsplot")
 
 BirthRate <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/BirthRate_update.csv", 
                       stringsAsFactors = F,
@@ -43,7 +40,7 @@ colnames(continents)[5] <- "Country.Code"
 #(data source:https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c#file-country-and-continent-codes-list-csv-csv) )
 
 
-#mortality rate: EU 2020-2022
+# mortality rate: EU 2020-2022
 EU_MR_20202022 <- read.csv("/Users/kdm/programowanie w R/demographicChanges_project/data/EU_MR20202022.csv",
                            stringsAsFactors = F)
 
@@ -123,7 +120,7 @@ comb_data_map_fr <- joinCountryData2Map(
 )
 
 #filters data from EU countries
-#filter data from EU
+#filters data from EU
 EU_FertRateTot <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "AUT" |
                 Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
                 Country.Code == "CYP" |
@@ -207,10 +204,10 @@ MeanAgeWom2020[MeanAgeWom2020 == "FI"] <- "FIN"
 MeanAgeWom2020[MeanAgeWom2020 == "SE"] <- "SWE"
 MeanAgeWom2020[MeanAgeWom2020 == "IE"] <- "IRL"
 
-# Mean age of women at birth of first child - removing other countries and some other records
+# Mean age of women at birth of first child - removes other countries and some other records
 MeanAgeWom2020 <- MeanAgeWom2020[-c(1, 5, 10, 11, 15, 21, 23, 27, 28, 31, 35, 39), ]
                                  
-# Mean age of women at birth of first child - renaming column's name
+# Mean age of women at birth of first child - renames column's name
 MeanAgeWom2020 <- MeanAgeWom2020 %>% rename(Country.Code = geo)
 
 # Removes columns
@@ -219,7 +216,7 @@ MeanAgeWom2020 <- subset (MeanAgeWom2020, select = -c(1:4, 6, 8))
 # Renames column
 MeanAgeWom2020 <- MeanAgeWom2020 %>% rename(Mean_Age = OBS_VALUE)
 
-# Mean age of women at birth of first child - joining df's
+# Mean age of women at birth of first child - new df
 comb_data_agewom_fr <- left_join(EU_FertRateTot, MeanAgeWom2020, by = "Country.Code")
 
 # Mean age of women at birth of first child & fertility rate - correlation
@@ -248,7 +245,7 @@ ggFR <- ggplot(data = comb_data_agewom_fr) +
 
 ggFR
 
-###Contraceptive modern method in EU countries
+###Contraceptive modern method in EU countries - prevalence (2019)
 
 #creates new data frame
 Country.Code <- c("AUT", "BEL", "BGR", "CYP", "CZE", "DEU", "DNK", "ESP", "EST", "FIN", "FRA",
@@ -262,10 +259,10 @@ PrevContrMeth <- data.frame(Country.Code, AnyMethod)
 #joins data
 comb_data_agewom_fr_contr <- left_join(comb_data_agewom_fr, PrevContrMeth, by = "Country.Code")
 
-# Fertility rate & contraceptive methods(prevalence) - correlation
+# Fertility rate & contraceptive methods (prevalence) - correlation
 cor(comb_data_agewom_fr_contr$X2020, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
 
-# Mean age of women at birth of first child & contraceptive methods(prevalence) - correlation
+# Mean age of women at birth of first child & contraceptive methods (prevalence) - correlation
 cor(comb_data_agewom_fr_contr$Mean_Age, comb_data_agewom_fr_contr$AnyMethod, use = "complete.obs")
 
 # Chart: Mean age of women at birth of first child & contraceptive methods
@@ -345,11 +342,11 @@ plt
 #comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_2019, by = "Country.Code")
 
 
-### GDP in 2020 - preparing df
+### GDP in 2020 - prepares df
 GDP_EU <- select(GDP_EU, geo, TIME_PERIOD, OBS_VALUE) 
 GDP_EU_2020 <- filter(GDP_EU,TIME_PERIOD==2020)
 
-# GDP - replacing country code
+# GDP - replaces country code
 GDP_EU_2020[GDP_EU_2020 == "BE"] <- "BEL"
 GDP_EU_2020[GDP_EU_2020 == "BG"] <- "BGR"
 GDP_EU_2020[GDP_EU_2020 == "CZ"] <- "CZE"
@@ -378,19 +375,19 @@ GDP_EU_2020[GDP_EU_2020 == "FI"] <- "FIN"
 GDP_EU_2020[GDP_EU_2020 == "SE"] <- "SWE"
 GDP_EU_2020[GDP_EU_2020 == "IE"] <- "IRL"
 
-# GDP- removing other countries and some other records
+# GDP- removes other countries and some other records
 GDP_EU_2020 <- GDP_EU_2020[-c(1, 5, 10, 14, 20, 25, 28, 36), ]
 
-# GDP- renaming column's name
+# GDP- renames column's name
 GDP_EU_2020 <- GDP_EU_2020 %>% rename(Country.Code = geo)
 
-#GDP - removing column
+#GDP - removes column
 GDP_EU_2020$TIME_PERIOD <- NULL
 
-#GDP - renaming column's name
+#GDP - renames column's name
 GDP_EU_2020 <- GDP_EU_2020 %>% rename(GDP_per_cap2020 = OBS_VALUE)
 
-# GDP - joining df's
+# GDP - joins df's
 comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_2020, by = "Country.Code")
 
 #correlation: FR and GDP
@@ -481,7 +478,6 @@ boxplot_DR <- ggplot (data = DeathRate_join, (aes(Continent_Name,X2020, color=Co
     legend.position = "none")
 
 boxplot_DR
-
 
 
 #calculations
@@ -850,7 +846,7 @@ cor(comb_data_agewom_fr_contr_gdp$GDP_per_cap2020, EU_LaborFem$X2020, use = "com
 cor(comb_data_agewom_fr_contr_gdp$Mean_Age,EU_LaborFem$X2020, use = "complete.obs") 
 cor(comb_data_agewom_fr_contr_gdp$AnyMethod, EU_LaborFem$X2020, use = "complete.obs")
 
-### Models
+### Linear models
 model1 <- lm(X2020 ~ GDP_per_cap2020, data = EU_LE_DEPR_GDP)
 gg_mod1 <- ggplot(data = EU_LE_DEPR_GDP)   +
   geom_point(mapping = aes(x = GDP_per_cap2020, y = X2020)) +

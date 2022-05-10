@@ -113,7 +113,7 @@ ggplotly(plt)
 
 Another correlates of fertility rate could be GDP per capita, which is:
 
-> "The indicator is calculated as the ratio of real GDP to the average population of a specific year. GDP measures the value of total final output of goods and services produced by an economy within a certain period of time. It includes goods and services that have markets (or which could have markets) and products which are produced by general government and non-profit institutions. It is a measure of economic activity and is also used as a proxy for the development in a country’s material living standards. However, it is a limited measure of economic welfare. For example, neither does GDP include most unpaid household work nor does GDP take account of negative effects of economic activity, like environmental degradation".
+> "the ratio of real GDP to the average population of a specific year. GDP measures the value of total final output of goods and services produced by an economy within a certain period of time. It includes goods and services that have markets (or which could have markets) and products which are produced by general government and non-profit institutions. It is a measure of economic activity and is also used as a proxy for the development in a country’s material living standards. However, it is a limited measure of economic welfare. For example, neither does GDP include most unpaid household work nor does GDP take account of negative effects of economic activity, like environmental degradation".
 
 (data & definition source: https://ec.europa.eu/eurostat/databrowser/view/sdg_08_10/default/table).
 
@@ -414,13 +414,13 @@ gg_mod2
 
 There is a visible decline in fertility rate when a woman gives birth to her first child at the age of 32.
 
-This is the result of regression model.
+This is the result of regression model:
 
 ``` {r, echo=FALSE, error=FALSE, warning = FALSE, tidy = TRUE}
-lm(X2020 ~ Mean_Age, data = comb_data_agewom_fr)  
+summary(model2) 
 ```
 
-Each subsequent year reduces the fertility rate by 0.04.
+Each subsequent year reduces the fertility rate by 0.04. However, the mean age variable explains only 10% of the variance in the fertility rate.
 
 The second interesting thing is high correlation between life expectancy and GDP per capita in 2020 in EU. 
 
@@ -432,13 +432,13 @@ gg_mod1
 
 Life expectancy increase to the level 20000 EUR GDP and then stabilizes. Life expectancy doesn't increase forever, of course. However, people living in wealthier countries live longer.
 
-This is the result of regression model.
+This is the result of regression model:
 
 ``` {r, echo=FALSE, error=FALSE, warning = FALSE, tidy = TRUE}
-lm(X2020 ~ GDP_per_cap2020, data = EU_LE_DEPR_GDP)
+summary(model1)
 ```
 
-Every 1000 EUR more GDP increases life expectancy by an average of approx. 55 minute. The most marked increase in life expectancy in EU countries in 2020 is visible up to the level of over 20,000 EUR GDP.
+Every 1 EUR more GDP increases life expectancy by an average of approx. 55 minutes. The most marked increase in life expectancy in EU countries in 2020 is visible up to the level of over 20,000 EUR GDP. GDP explains 39% of the variance in the life expectancy. Similar research results were published in an article by Dayanikli, Gokare & Kincaid (2016).
 
 
 
