@@ -446,3 +446,14 @@ Every 1 EUR more GDP increases life expectancy by an average of approx. 55 minut
 ***
 
 In summary, we see fertility rate and birth rate falling over the years, while death rate and life expectancy are increasing. It is very important to follow demographic changes in countries and individual parts of the world so that governments can react early and shape their policies on public health, pro-family policies, etc.It is impossible to track demographic changes in isolation from the data on armed conflicts and the related migration of people, climate change, and the pandemic situation. 
+
+***
+
+References:
+
+https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c (17.08.2022).
+
+Freeman, M., Ross, J (2020). Data science. Programowanie, analiza i wizualizacja danych z wykorzystaniem języka R. Gliwice: Helion.
+Long, D. (2019). R Cookbook, 2nd Edition. Downloaded from: https://rc2e.com (17.08.2022).
+Lander, J. P. (2018). R dla każdego. Zaawansowane analizy i grafika statystyczna. Warszawa: APN Promise.
+Wawrowski, R. Metody przetwarzania i analizy danych w R. Downloaded from: http://www.wawrowski.edu.pl/adr/index.html (17.08.2022).
