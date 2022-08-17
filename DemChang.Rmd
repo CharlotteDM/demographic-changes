@@ -454,6 +454,9 @@ References:
 https://gist.github.com/stevewithington/20a69c0b6d2ff846ea5d35e5fc47f26c (17.08.2022).
 
 Freeman, M., Ross, J (2020). Data science. Programowanie, analiza i wizualizacja danych z wykorzystaniem języka R. Gliwice: Helion.
+
 Long, D. (2019). R Cookbook, 2nd Edition. Downloaded from: https://rc2e.com (17.08.2022).
+
 Lander, J. P. (2018). R dla każdego. Zaawansowane analizy i grafika statystyczna. Warszawa: APN Promise.
+
 Wawrowski, R. Metody przetwarzania i analizy danych w R. Downloaded from: http://www.wawrowski.edu.pl/adr/index.html (17.08.2022).
