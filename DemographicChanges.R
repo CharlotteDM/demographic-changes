@@ -50,7 +50,6 @@ EU_MR_20202022 <- read.csv("data/EU_MR20202022.csv",
 EU_MR_20202022$geo[EU_MR_20202022$geo == "AT"] <- "AUT"
 EU_MR_20202022$geo[EU_MR_20202022$geo == "BE"] <- "BEL"
 EU_MR_20202022$geo[EU_MR_20202022$geo == "BG"] <- "BGR"
-EU_MR_20202022$geo[EU_MR_20202022$geo == "BG"] <- "BGR"
 EU_MR_20202022$geo[EU_MR_20202022$geo == "CH"] <- "CHE"
 EU_MR_20202022$geo[EU_MR_20202022$geo == "CY"] <- "CYP"
 EU_MR_20202022$geo[EU_MR_20202022$geo == "CZ"] <- "CZE"
