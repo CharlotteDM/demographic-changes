@@ -439,7 +439,7 @@ This is the result of regression model:
 summary(model1)
 ```
 
-Every 1 EUR more GDP increases life expectancy by an average of approx. 55 minutes. The most marked increase in life expectancy in EU countries in 2020 is visible up to the level of over 20,000 EUR GDP. GDP explains 39% of the variance in the life expectancy. Similar research results were published in an article by Dayanikli, Gokare & Kincaid (2016).
+Every 1 EUR more GDP increases life expectancy by an average of approx. 55 minutes. The most marked increase in life expectancy in EU countries in 2020 is visible up to the level of over 20,000 EUR GDP. GDP explains 40% of the variance in the life expectancy. Similar research results were published in an article by Dayanikli, Gokare & Kincaid (2016).
 
 
 
