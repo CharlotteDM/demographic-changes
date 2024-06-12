@@ -4,7 +4,9 @@ library("ggplot2")
 library("gganimate")
 library("ggrepel")
 library("rworldmap")
-library("rgeos")
+library("sf")
+library("terra")
+library("rworldxtra")
 library("RColorBrewer")
 library("knitr")
 library("plotly")
@@ -345,7 +347,7 @@ plt
 
 
 ### GDP in 2020 - prepares df
-GDP_EU <- select(GDP_EU, geo, TIME_PERIOD, OBS_VALUE) 
+#GDP_EU <- select(GDP_EU, geo, TIME_PERIOD, OBS_VALUE) 
 GDP_EU_2020 <- filter(GDP_EU,TIME_PERIOD==2020)
 
 # GDP - replaces country code
@@ -408,9 +410,9 @@ ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp,
                  columns = c("Mean_Age", "AnyMethod", "GDP_per_cap2020"),
                  title = "Correlations",
                  columnLabels = c("Mean age", "Contracept prev", "GDP per cap"),
-                 upper = list(continuous = wrap("cor", size = 2.5)),
+                 upper = list(continuous = GGally::wrap("cor", size = 2.5)),
                  lower = list(continuous = "smooth"))
-
+ggpFR
 
 ### Death Rate
 #removes rows with region or groups of countries
@@ -569,7 +571,7 @@ ggeu_mr <- ggplot(
   shadow_mark(alpha = 0.3, size = 0.5) +
   transition_time(TIME_PERIOD) 
 
-animate(ggeu_mr, 
+gganimate::animate(ggeu_mr, 
         duration = 30)
 
 
@@ -733,7 +735,7 @@ plot_LF <- ggplot(data = EU_LaborFem) +
     axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
     axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
     legend.position = "none") 
-
+plot_LF
 
 
 ### Life Expectation
@@ -835,7 +837,7 @@ ggpLE <- ggpairs(EU_LE_DEPR_GDP,
                  columns = c("X2020", "Depr_sympt", "GDP_per_cap2020"),
                  title = "Correlations",
                  columnLabels = c("Life expect", "Depression sympt", "GDP per cap"),
-                 upper = list(continuous = wrap("cor", size = 2.5)),
+                 upper = list(continuous = GGally::wrap("cor", size = 2.5)),
                  lower = list(continuous = "smooth"))
 ggpLE
 
@@ -861,7 +863,7 @@ gg_mod1 <- ggplot(data = EU_LE_DEPR_GDP)   +
     plot.title = element_text(color="royalblue4", size=14, face="bold"),
     axis.title.x = element_text(color="royalblue4", size=12, face="bold"),
     axis.title.y = element_text(color="royalblue4", size=12, face="bold")) 
-
+gg_mod1
 
 model2 <- lm(X2020 ~ Mean_Age, data = comb_data_agewom_fr)
 cor(comb_data_agewom_fr$X2020,comb_data_agewom_fr$Mean_Age, use = "complete.obs" )
@@ -876,6 +878,6 @@ gg_mod2 <- ggplot(data = comb_data_agewom_fr)   +
     plot.title = element_text(color="royalblue4", size=14, face="bold"),
     axis.title.x = element_text(color="royalblue4", size=12, face="bold"),
     axis.title.y = element_text(color="royalblue4", size=12, face="bold")) 
-
+gg_mod2
 
 
