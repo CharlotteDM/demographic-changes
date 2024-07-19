@@ -319,7 +319,7 @@ As we can see death rate in Poland increases since 1960. Moreover, the current p
 The COVID-19 pandemic has affected death rate in EU countries, as the animation below shows:
 
 ``` {r , out.width="150%", echo=FALSE, error=FALSE, warning=FALSE}
-animate(ggeu_mr, 
+gganimate::animate(ggeu_mr, 
         duration = 30)
 
 ```

@@ -14,6 +14,8 @@ library("htmlwidgets")
 library("GGally")
 library("stats")
 library("rstudioapi")
+library(geos)
+library(stars)
 
 path <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(path)
@@ -122,6 +124,8 @@ comb_data_map_fr <- joinCountryData2Map(
   nameJoinColumn = "Country.Code",
   mapResolution = "high"
 )
+?joinCountryData2Map
+
 
 #filters data from EU countries
 #filters data from EU

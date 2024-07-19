@@ -4,7 +4,9 @@ library("ggplot2")
 library("gganimate")
 library("ggrepel")
 library("rworldmap")
-library("rgeos")
+library("sf")
+library("terra")
+library("rworldxtra")
 library("RColorBrewer")
 library("knitr")
 library("plotly")
@@ -12,6 +14,8 @@ library("htmlwidgets")
 library("GGally")
 library("stats")
 library("rstudioapi")
+library(geos)
+library(stars)
 
 path <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(path)
@@ -35,7 +39,7 @@ AgeWom <- read.csv("data/Age WomFirstChild_update.csv",
                    stringsAsFactors = F)
 
 GDP_EU <- read.csv("data/GDP_EU_update.csv",
-                        stringsAsFactors = F)
+                   stringsAsFactors = F)
 
 continents <- read.csv("data/continents.csv",
                        stringsAsFactors = F)
@@ -81,16 +85,16 @@ EU_MR_20202022$geo[EU_MR_20202022$geo == "SK"] <- "SVK"
 
 #filters data from EU
 EUonly_MR_20202022 <- filter (EU_MR_20202022, geo == "POL" | geo == "AUT" |
-                            geo == "BEL" | geo == "BGR" | geo == "HRV" |
-                            geo == "CYP" |
-                            geo == "CZE" | geo == "DNK" | geo == "EST" |
-                            geo == "FIN" | geo == "FRA" | geo == "GRC" |
-                            geo == "ESP" | geo == "NLD" | geo == "IRL" |
-                            geo == "LTU" | geo == "LUX" | geo == "LVA" |
-                            geo == "MLT" | geo == "DEU" | geo == "PRT" |
-                            geo == "ROU" | geo == "SVK" | geo == "SVN" |
-                            geo == "SWE" | geo == "HUN" | 
-                            geo == "ITA")
+                                geo == "BEL" | geo == "BGR" | geo == "HRV" |
+                                geo == "CYP" |
+                                geo == "CZE" | geo == "DNK" | geo == "EST" |
+                                geo == "FIN" | geo == "FRA" | geo == "GRC" |
+                                geo == "ESP" | geo == "NLD" | geo == "IRL" |
+                                geo == "LTU" | geo == "LUX" | geo == "LVA" |
+                                geo == "MLT" | geo == "DEU" | geo == "PRT" |
+                                geo == "ROU" | geo == "SVK" | geo == "SVN" |
+                                geo == "SWE" | geo == "HUN" | 
+                                geo == "ITA")
 
 
 #The Highest Fertility Rate in the World in 2020
@@ -112,7 +116,7 @@ top_10_hfr <- FertRateTot %>%
   arrange(-gain) %>%
   mutate(gain_str = paste(format(round(gain, 2)), "births per woman")) %>%
   dplyr::select(Country.Name, gain_str)
- 
+
 #world map & the Fertility Rate in 2020 
 comb_data_map_fr <- joinCountryData2Map(
   FertRateTot,
@@ -120,20 +124,22 @@ comb_data_map_fr <- joinCountryData2Map(
   nameJoinColumn = "Country.Code",
   mapResolution = "high"
 )
+?joinCountryData2Map
+
 
 #filters data from EU countries
 #filters data from EU
 EU_FertRateTot <- filter (FertRateTot, Country.Code == "POL" | Country.Code == "AUT" |
-                Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
-                Country.Code == "CYP" |
-                Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
-                Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
-                Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
-                Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
-                Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
-                Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
-                Country.Code == "SWE" | Country.Code == "HUN" | 
-                Country.Code == "ITA")
+                            Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                            Country.Code == "CYP" |
+                            Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                            Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                            Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                            Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                            Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                            Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                            Country.Code == "SWE" | Country.Code == "HUN" | 
+                            Country.Code == "ITA")
 
 #The Highest Fertility Rate in the EU in 2020
 EU_HighFertRat <- EU_FertRateTot %>%
@@ -175,7 +181,7 @@ EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, 
 
 ### Mean age of women at birth of first child - preparing df with data from 2020
 MeanAgeWom2020 <- filter(AgeWom,
-                     TIME_PERIOD==2020)
+                         TIME_PERIOD==2020)
 
 # Mean age of women at birth of first child - replacing country code
 MeanAgeWom2020[MeanAgeWom2020 == "BE"] <- "BEL"
@@ -208,7 +214,7 @@ MeanAgeWom2020[MeanAgeWom2020 == "IE"] <- "IRL"
 
 # Mean age of women at birth of first child - removes other countries and some other records
 MeanAgeWom2020 <- MeanAgeWom2020[-c(1, 5, 10, 11, 15, 21, 23, 27, 28, 31, 35, 39), ]
-                                 
+
 # Mean age of women at birth of first child - renames column's name
 MeanAgeWom2020 <- MeanAgeWom2020 %>% rename(Country.Code = geo)
 
@@ -320,23 +326,23 @@ plt <- plot_ly(
     titlefont = list(
       size = 18,
       color = "darkblue"),
-         xaxis = list(title = "Mean age (at birth of first child)", 
-                      color="deeppink", size=10),
-         yaxis = list(title = "Contraceptive methods - prevalence (%)", 
-                      color="deeppink", size=10),
-         annotations = legendtitle)
-       
+    xaxis = list(title = "Mean age (at birth of first child)", 
+                 color="deeppink", size=10),
+    yaxis = list(title = "Contraceptive methods - prevalence (%)", 
+                 color="deeppink", size=10),
+    annotations = legendtitle)
+
 plt
 
 #adds data: GDP 2020 - non actual
 #data source: https://ec.europa.eu/eurostat/databrowser/view/sdg_08_10/default/table
 
 #GDP_per_cap <- c(36080, 6630, 18460, 49270, 35980, 15510, 17760, 25200, 33320, 12700, 27230, 25370,
-                 #12530, 14050, 85030, 13270, 22660, 41980, 38110, 13020, 18670, 9120, 20720, 15890,
-                 #37150, 44180, 60130)
+#12530, 14050, 85030, 13270, 22660, 41980, 38110, 13020, 18670, 9120, 20720, 15890,
+#37150, 44180, 60130)
 #Country.Code <- c("BEL", "BGR", "CZE", "DNK", "DEU", "EST", "GRC", "ESP", "FRA", "HRV", "ITA",
-                  #"CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
-                  #"SVN", "SVK", "FIN", "SWE", "IRL")
+#"CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
+#"SVN", "SVK", "FIN", "SWE", "IRL")
 
 #GDP_EU_2019 <- data.frame(Country.Code, GDP_per_cap)      
 
@@ -345,7 +351,7 @@ plt
 
 
 ### GDP in 2020 - prepares df
-GDP_EU <- select(GDP_EU, geo, TIME_PERIOD, OBS_VALUE) 
+#GDP_EU <- select(GDP_EU, geo, TIME_PERIOD, OBS_VALUE) 
 GDP_EU_2020 <- filter(GDP_EU,TIME_PERIOD==2020)
 
 # GDP - replaces country code
@@ -395,7 +401,7 @@ comb_data_agewom_fr_contr_gdp <- left_join(comb_data_agewom_fr_contr, GDP_EU_202
 #correlation: FR and GDP
 cor(comb_data_agewom_fr_contr_gdp$X2020,comb_data_agewom_fr_contr_gdp$GDP_per_cap2020)
 round(sd(comb_data_agewom_fr_contr_gdp$X2020), 2)
-   
+
 #correlation: Mean age at the birth of first child and GDP
 cor(comb_data_agewom_fr_contr_gdp$Mean_Age,comb_data_agewom_fr_contr_gdp$GDP_per_cap2020)
 round(sd(comb_data_agewom_fr_contr_gdp$GDP_per_cap), 2)
@@ -405,22 +411,22 @@ cor(comb_data_agewom_fr_contr_gdp$AnyMethod, comb_data_agewom_fr_contr_gdp$GDP_p
 
 #ggpairs
 ggpFR <- ggpairs(comb_data_agewom_fr_contr_gdp, 
-        columns = c("Mean_Age", "AnyMethod", "GDP_per_cap2020"),
-        title = "Correlations",
-        columnLabels = c("Mean age", "Contracept prev", "GDP per cap"),
-        upper = list(continuous = wrap("cor", size = 2.5)),
-        lower = list(continuous = "smooth"))
-
+                 columns = c("Mean_Age", "AnyMethod", "GDP_per_cap2020"),
+                 title = "Correlations",
+                 columnLabels = c("Mean age", "Contracept prev", "GDP per cap"),
+                 upper = list(continuous = GGally::wrap("cor", size = 2.5)),
+                 lower = list(continuous = "smooth"))
+ggpFR
 
 ### Death Rate
 #removes rows with region or groups of countries
 
 DeathRate <- DeathRate[-c(2, 4, 8, 37, 62, 63, 64, 65, 66, 
-                    69, 74, 75, 96, 99, 103, 104, 105, 106, 
-                    108, 111, 129, 135, 136, 137, 140, 
-                    141, 143, 154, 157, 162, 171, 
-                    182, 184, 192, 199, 205, 216, 218, 219, 231, 232, 
-                    237, 239, 242, 242, 250, 260), ]
+                          69, 74, 75, 96, 99, 103, 104, 105, 106, 
+                          108, 111, 129, 135, 136, 137, 140, 
+                          141, 143, 154, 157, 162, 171, 
+                          182, 184, 192, 199, 205, 216, 218, 219, 231, 232, 
+                          237, 239, 242, 242, 250, 260), ]
 
 #The Highest Death Rate in the World in 2020
 HighDeathRat <- DeathRate %>%
@@ -490,20 +496,20 @@ calcDR <- as.data.frame(DeathRate_join %>%
                                            (MedDR = round(median(X2020, na.rm = T), 2)),
                                            (SDDR = round(sd(X2020, na.rm = T), 2))))
 
-                   
+
 
 #filters data from EU
 EU_DeathRate <- filter (DeathRate_join, Country.Code == "POL" | Country.Code == "AUT" |
-                            Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
-                            Country.Code == "CYP" |
-                            Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
-                            Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
-                            Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
-                            Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
-                            Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
-                            Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
-                            Country.Code == "SWE" | Country.Code == "HUN" | 
-                            Country.Code == "ITA")
+                          Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                          Country.Code == "CYP" |
+                          Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                          Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                          Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                          Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                          Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                          Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                          Country.Code == "SWE" | Country.Code == "HUN" | 
+                          Country.Code == "ITA")
 
 #removes duplicated row - Cyprus
 EU_DeathRate <- EU_DeathRate[-4, ]
@@ -569,8 +575,8 @@ ggeu_mr <- ggplot(
   shadow_mark(alpha = 0.3, size = 0.5) +
   transition_time(TIME_PERIOD) 
 
-animate(ggeu_mr, 
-        duration = 30)
+gganimate::animate(ggeu_mr, 
+                   duration = 30)
 
 
 
@@ -579,11 +585,11 @@ animate(ggeu_mr,
 
 year_dr_pl <- c(1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 
                 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 
-                 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988,
-                 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997,
-                 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
-                 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
-                 2016, 2017, 2018, 2019, 2020)
+                1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988,
+                1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997,
+                1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006,
+                2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,
+                2016, 2017, 2018, 2019, 2020)
 
 EU_DeathRate[22, ]
 dr_pl <- c(7.6, 7.6, 7.9, 7.5, 7.6, 7.4, 7.4, 7.7, 7.6, 8.1, 8.2, 8.7, 8, 8.4, 8.2, 8.7, 8.9,
@@ -634,8 +640,8 @@ comb_data_map_br <- joinCountryData2Map(
 
 #Small Multiples: BR & continents in 2020
 BirthRate <- left_join(BirthRate, continents, by = "Country.Code")
-                                      
-                                      
+
+
 BR_cont <- ggplot(data = BirthRate) +
   geom_point(mapping = aes(x = Country.Code, y = X2020), color = "green") +
   facet_wrap(~ Continent_Name,nrow = 1, scales = "free_x") +
@@ -658,31 +664,15 @@ BR_cont
 #calculations
 
 calcBR <- as.data.frame(BirthRate %>%
-  group_by(Continent_Name) %>%
-  dplyr::summarise((AvgBR = round(mean(X2020, na.rm = T), 2)),
-                   (MedBR = round(median(X2020, na.rm = T), 2)),
-                   (SDBR = round(sd(X2020, na.rm = T), 2))))
+                          group_by(Continent_Name) %>%
+                          dplyr::summarise((AvgBR = round(mean(X2020, na.rm = T), 2)),
+                                           (MedBR = round(median(X2020, na.rm = T), 2)),
+                                           (SDBR = round(sd(X2020, na.rm = T), 2))))
 
 
 ### BR and Labor Force in female group in EU 
 #EU BR
 EU_BirthRate<- filter (BirthRate, Country.Code == "POL" | Country.Code == "AUT" |
-                            Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
-                            Country.Code == "CYP" |
-                            Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
-                            Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
-                            Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
-                            Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
-                            Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
-                            Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
-                            Country.Code == "SWE" | Country.Code == "HUN" | 
-                            Country.Code == "ITA")
-
-#removes duplicated row - Cyprus
-EU_BirthRate <- EU_BirthRate[-4, ]
-
-#EU LF
-EU_LaborFem<- filter (LaborFem, Country.Code == "POL" | Country.Code == "AUT" |
                          Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
                          Country.Code == "CYP" |
                          Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
@@ -693,6 +683,22 @@ EU_LaborFem<- filter (LaborFem, Country.Code == "POL" | Country.Code == "AUT" |
                          Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
                          Country.Code == "SWE" | Country.Code == "HUN" | 
                          Country.Code == "ITA")
+
+#removes duplicated row - Cyprus
+EU_BirthRate <- EU_BirthRate[-4, ]
+
+#EU LF
+EU_LaborFem<- filter (LaborFem, Country.Code == "POL" | Country.Code == "AUT" |
+                        Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                        Country.Code == "CYP" |
+                        Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                        Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                        Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                        Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                        Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                        Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                        Country.Code == "SWE" | Country.Code == "HUN" | 
+                        Country.Code == "ITA")
 
 #EU_LF - renaming column's name
 #rename(EU_LaborFem, X2020 = LF2020)
@@ -711,7 +717,7 @@ X1995 <- cor(EU_BirthRate$X1995, EU_LaborFem$X1995, use = "complete.obs")
 X1990 <- cor(EU_BirthRate$X1990, EU_LaborFem$X1990, use = "complete.obs")
 #correlation: BR & LF in EU over the 30 years
 corr_BR_LF <- data.frame(X2020,X2015,X2010,X2005,X2000,X1995,X1990,
-stringsAsFactors = FALSE)
+                         stringsAsFactors = FALSE)
 
 remove(X2020,X2015,X2010,X2005,X2000,X1995,X1990)
 
@@ -733,7 +739,7 @@ plot_LF <- ggplot(data = EU_LaborFem) +
     axis.title.x = element_text(color="steelblue2", size=14, face="bold"),
     axis.title.y = element_text(color="steelblue2", size=14, face="bold"),
     legend.position = "none") 
-
+plot_LF
 
 
 ### Life Expectation
@@ -771,16 +777,16 @@ comb_data_map_le <- joinCountryData2Map(
 
 #filters data from EU countries
 EU_LifeExpect <- filter (LifeExpect, Country.Code == "POL" | Country.Code == "AUT" |
-                            Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
-                            Country.Code == "CYP" |
-                            Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
-                            Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
-                            Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
-                            Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
-                            Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
-                            Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
-                            Country.Code == "SWE" | Country.Code == "HUN" | 
-                            Country.Code == "ITA")
+                           Country.Code == "BEL" | Country.Code == "BGR" | Country.Code == "HRV" |
+                           Country.Code == "CYP" |
+                           Country.Code == "CZE" | Country.Code == "DNK" | Country.Code == "EST" |
+                           Country.Code == "FIN" | Country.Code == "FRA" | Country.Code == "GRC" |
+                           Country.Code == "ESP" | Country.Code == "NLD" | Country.Code == "IRL" |
+                           Country.Code == "LTU" | Country.Code == "LUX" | Country.Code == "LVA" |
+                           Country.Code == "MLT" | Country.Code == "DEU" | Country.Code == "PRT" |
+                           Country.Code == "ROU" | Country.Code == "SVK" | Country.Code == "SVN" |
+                           Country.Code == "SWE" | Country.Code == "HUN" | 
+                           Country.Code == "ITA")
 
 #The Highest LE in the EU in 2020
 EU_HighLE <- EU_LifeExpect %>%
@@ -804,8 +810,8 @@ comb_data_map_eu_le <- joinCountryData2Map(
 
 #adds data about depressive symptoms
 Depr_sympt <- c(8.4, 5.0, 4.2, 8.3, 9.4, 8.2, 2.7, 4.8, 10.8, 8.9, 4.2, 2.5,
-                 5.7, 6.2, 8.8, 5.5, 8.8, 8.3, 5.6, 5.2, 8.5, 4.3, 7.5, 3.2,
-                 6.5, 10.5, 4.9)
+                5.7, 6.2, 8.8, 5.5, 8.8, 8.3, 5.6, 5.2, 8.5, 4.3, 7.5, 3.2,
+                6.5, 10.5, 4.9)
 Country.Code <- c("BEL", "BGR", "CZE", "DNK", "DEU", "EST", "GRC", "ESP", "FRA", "HRV", "ITA",
                   "CYP", "LVA", "LTU", "LUX", "HUN", "MLT", "NLD", "AUT", "POL", "PRT", "ROU", 
                   "SVN", "SVK", "FIN", "SWE", "IRL")
@@ -832,11 +838,11 @@ EU_LE_DEPR_GDP <- cbind(EU_LifeExpect_depr, GDP_per_cap2020 = comb_data_agewom_f
 
 #ggpairs
 ggpLE <- ggpairs(EU_LE_DEPR_GDP, 
-              columns = c("X2020", "Depr_sympt", "GDP_per_cap2020"),
-              title = "Correlations",
-              columnLabels = c("Life expect", "Depression sympt", "GDP per cap"),
-              upper = list(continuous = wrap("cor", size = 2.5)),
-              lower = list(continuous = "smooth"))
+                 columns = c("X2020", "Depr_sympt", "GDP_per_cap2020"),
+                 title = "Correlations",
+                 columnLabels = c("Life expect", "Depression sympt", "GDP per cap"),
+                 upper = list(continuous = GGally::wrap("cor", size = 2.5)),
+                 lower = list(continuous = "smooth"))
 ggpLE
 
 
@@ -861,7 +867,7 @@ gg_mod1 <- ggplot(data = EU_LE_DEPR_GDP)   +
     plot.title = element_text(color="royalblue4", size=14, face="bold"),
     axis.title.x = element_text(color="royalblue4", size=12, face="bold"),
     axis.title.y = element_text(color="royalblue4", size=12, face="bold")) 
-
+gg_mod1
 
 model2 <- lm(X2020 ~ Mean_Age, data = comb_data_agewom_fr)
 cor(comb_data_agewom_fr$X2020,comb_data_agewom_fr$Mean_Age, use = "complete.obs" )
@@ -876,6 +882,6 @@ gg_mod2 <- ggplot(data = comb_data_agewom_fr)   +
     plot.title = element_text(color="royalblue4", size=14, face="bold"),
     axis.title.x = element_text(color="royalblue4", size=12, face="bold"),
     axis.title.y = element_text(color="royalblue4", size=12, face="bold")) 
-
+gg_mod2
 
 
