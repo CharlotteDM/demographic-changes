@@ -168,6 +168,7 @@ EU_FR <- ggplot(data = EU_FertRateTot) + geom_col(aes(x = reorder(Country.Name, 
   scale_fill_gradient(low="lightblue", high="red") +
   coord_flip() +
   theme_light() +
+  geom_text(data = EU_FertRateTot, aes(x = reorder(Country.Name, X2020), y = X2020, label = X2020), color = "black", position = "stack", size = 4, hjust = 1.5) +
   labs(
     title = "Fertility rate in EU in 2020 (births per woman)",
     caption = "(based on data from: https://data.worldbank.org/indicator/SP.DYN.TFRT.IN)",
