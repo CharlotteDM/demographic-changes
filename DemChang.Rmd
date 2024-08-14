@@ -61,7 +61,7 @@ Fertility rate drops globally.
 The country of EU with the highest fertility rate in 2020 is 
 __`r EU_HighFertRat$Country.Name`__. The fertility rate is 
 __`r EU_HighFertRat$eu_hfr`__.
-The high fertility rate in France is the result of counting a combined result with dependent territories in the whole world (e.g. French Guiana, French Polynesia, Martinique).
+The high fertility rate in France is probably the result of good social policy (medical care, nursery offer, etc.)..
 
 The country of EU with the lowest fertility rate in 2020 is 
 __`r EU_LowFertRat$Country.Name`__. The fertility rate is 
